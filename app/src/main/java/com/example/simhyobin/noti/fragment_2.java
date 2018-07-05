@@ -36,7 +36,7 @@ public class fragment_2 extends Fragment {
         String sec=getString(R.string.secondpage);
         View view = inflater.inflate(R.layout.fragment_fragment_2, container, false);
         TextView message = (TextView) view.findViewById(R.id.message);
-        message.setText(sec);
+        //message.setText(sec);
         return view;
     }
 
