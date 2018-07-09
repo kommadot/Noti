@@ -3,6 +3,7 @@ package com.example.simhyobin.noti;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,13 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
+        ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -50,12 +45,19 @@ public class MainActivity extends AppCompatActivity {
                 // Code goes here
             }
         });
+
+        TabLayout mTab = (TabLayout)findViewById(R.id.tabs);
+        mTab.setupWithViewPager(vpPager);
+
+        mTab.getTabAt(0).setIcon(R.drawable.baseline_person_black_48);
+        mTab.getTabAt(1).setIcon(R.drawable.baseline_chat_black_48);
+        mTab.getTabAt(2).setIcon(R.drawable.baseline_settings_black_48);
+
+
     }
-    /**
-     * A placeholder fragment containing a simple view.
-     */
+
     public static class MyPagerAdapter extends FragmentPagerAdapter {
-        private static int NUM_ITEMS = 2;
+        private static int NUM_ITEMS = 3;
 
         public MyPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     return fragment_1.newInstance(0, "Page # 1");
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return fragment_2.newInstance(1, "Page # 2");
+                case 2:
+                    return fragment_3.newInstance(2, "Page # 3");
                 default:
                     return null;
             }
@@ -83,8 +87,19 @@ public class MainActivity extends AppCompatActivity {
         // Returns the page title for the top indicator
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Page " + position;
+            switch (position){
+                case 0:
+                    return "친구";
+                case 1:
+                    return "메시지";
+                case 2:
+                    return "설정";
+                default:
+                    return "NULL";
+            }
         }
-
     }
+
+
+
 }
