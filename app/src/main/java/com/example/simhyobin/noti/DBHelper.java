@@ -30,6 +30,16 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("MSG_CNT INT ); ");
 
         db.execSQL(sb.toString());
+        StringBuffer sb2 = new StringBuffer();
+        sb2.append("CREATE TABLE REIECVE_MESSAGE(");
+        sb2.append("USER_ID STRING NOT NULL,");
+        sb2.append("USER_NAME STRING NOT NULL,");
+        sb2.append("CONTENT STRING NOT NULL,");
+        sb2.append("RECEIVE_DATE DATETIME,");
+        sb2.append("NOTI_DATE DATETIME,");
+        sb2.append("UNIQUE_HASH STRING PRIMARY KEY);");
+        db.execSQL(sb2.toString());
+
     }
 
     @Override
@@ -59,6 +69,28 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         cursor.close();
 
+        return result;
+    }
+    public ArrayList<String[]> ReadReceiveMessage(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM RECEIVE_MESSAGE", null);
+        ArrayList<String[]> result = new ArrayList<String[]>();
+        int i= 0;
+        cursor.moveToFirst();
+
+        while(!(cursor.isAfterLast())){
+            String[] temp = new String[4];
+            temp[0] = cursor.getString(0);
+            temp[1] = cursor.getString(1);
+            temp[2] = cursor.getString(2);
+            temp[3] = cursor.getString(3);
+            temp[4] = cursor.getString(4);
+            temp[5] = cursor.getString(5);
+            result.add(temp);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
         return result;
     }
 }
