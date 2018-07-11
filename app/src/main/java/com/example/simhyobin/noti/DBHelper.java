@@ -22,6 +22,15 @@ public class DBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        StringBuffer sb2 = new StringBuffer();
+        sb2.append("CREATE TABLE RECEIVE_MESSAGE(");
+        sb2.append("USER_ID STRING NOT NULL,");
+        sb2.append("USER_NAME STRING NOT NULL,");
+        sb2.append("CONTENT STRING NOT NULL,");
+        sb2.append("RECEIVE_DATE DATETIME,");
+        sb2.append("NOTI_DATE DATETIME,");
+        sb2.append("UNIQUE_HASH STRING PRIMARY KEY);");
+        db.execSQL(sb2.toString());
         StringBuffer sb = new StringBuffer();
         sb.append("CREATE TABLE USER_FRIENDS ( ");
         sb.append("USER_ID STRING PRIMARY KEY NOT NULL, ");
@@ -30,21 +39,12 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("MSG_CNT INT ); ");
 
         db.execSQL(sb.toString());
-        StringBuffer sb2 = new StringBuffer();
-        sb2.append("CREATE TABLE REIECVE_MESSAGE(");
-        sb2.append("USER_ID STRING NOT NULL,");
-        sb2.append("USER_NAME STRING NOT NULL,");
-        sb2.append("CONTENT STRING NOT NULL,");
-        sb2.append("RECEIVE_DATE DATETIME,");
-        sb2.append("NOTI_DATE DATETIME,");
-        sb2.append("UNIQUE_HASH STRING PRIMARY KEY);");
-        db.execSQL(sb2.toString());
+
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-
     }
 
     public ArrayList<String[]> ReadFriendsData(){
@@ -79,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper{
         cursor.moveToFirst();
 
         while(!(cursor.isAfterLast())){
-            String[] temp = new String[4];
+            String[] temp = new String[6];
             temp[0] = cursor.getString(0);
             temp[1] = cursor.getString(1);
             temp[2] = cursor.getString(2);
@@ -92,5 +92,12 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         cursor.close();
         return result;
+    }
+    public void insert() {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('abcd','김철수','저는 행복합니다 님덜','20180606','20180713','hashman');");
+        db.close();
     }
 }

@@ -49,7 +49,10 @@ public class MessageCardFragment extends RecyclerView.Adapter<MessageCardFragmen
     // View 의 내용을 해당 포지션의 데이터로 바꿉니다.
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        //holder.content.setText(mItems.get(position).getName());
+        holder.content.setText(mItems.get(position).getContent());
+        holder.username.setText(mItems.get(position).getUsername());
+        holder.noti_date.setText(mItems.get(position).getNoti_date());
+        holder.rec_date.setText(mItems.get(position).getRec_date());
     }
 
     // 데이터 셋의 크기를 리턴해줍니다.

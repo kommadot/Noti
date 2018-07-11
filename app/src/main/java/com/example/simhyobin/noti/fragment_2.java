@@ -31,7 +31,7 @@ public class fragment_2 extends Fragment {
     private RecyclerView recyclerView;
     private MessageCardFragment adapter;
     private ArrayList<MessageItem> list = new ArrayList<>();
-
+    DBHelper dbhelper;
     public static fragment_2 newInstance(int page, String title) {
         fragment_2 fragmentFirst = new fragment_2();
         Bundle args = new Bundle();
@@ -49,7 +49,10 @@ public class fragment_2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_fragment_2, container, false);
-        list = MessageItem.createContactsList(5);
+        dbhelper = new DBHelper(getActivity(), "data", null, 1);
+        ArrayList<MessageItem> list;
+        ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
+        list=MessageItem.createContactsList(data);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         adapter = new MessageCardFragment(getActivity(),list);

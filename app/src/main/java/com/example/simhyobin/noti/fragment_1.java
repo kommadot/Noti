@@ -39,12 +39,14 @@ public class fragment_1 extends Fragment {
         args.putString("someTitle", title);
         fragmentFirst.setArguments(args);
         return fragmentFirst;
+
     }
 
     // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("someTitle");
     }
