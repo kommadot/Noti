@@ -5,12 +5,50 @@
     android:orientation="vertical"
     tools:context="com.example.simhyobin.noti.fragment_1">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:text="TextView"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/list_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_favorite_title"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="즐겨찾기"
+                android:textSize="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textColor="#FFFFFF"
+                android:background="@color/colorPrimaryDark"/>
+            <LinearLayout
+                android:id="@+id/user_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/user_common_title"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="친구목록"
+                android:textSize="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textColor="#FFFFFF"
+                android:background="@color/colorPrimaryDark"/>
+            <LinearLayout
+                android:id="@+id/user_common"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
