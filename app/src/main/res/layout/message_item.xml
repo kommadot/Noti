@@ -4,43 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
-        android:id="@+id/cardview"
-        card:cardCornerRadius="3dp"
-        card:contentPadding="10dp"
+        android:id="@+id/media_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp"
+        card:cardBackgroundColor="@android:color/white"
+        card:cardElevation="4dp"
+        card:cardUseCompatPadding="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/username"
-                android:gravity="center|left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="username"
                 android:padding="10dp"/>
+
             <TextView
                 android:id="@+id/content"
-                android:gravity="center|left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="asdf"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/rec_date"
-                android:gravity="center|left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="asdf"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:layout_below="@id/username"
+                android:text="contentasdfasdfasdfasdfasdsdfasdfasdsdfasdfasdsdfasdfasdssdfasdfasddfasdfasdsdfasdfasdfd"
+                android:textAlignment="viewStart" />
+
             <TextView
                 android:id="@+id/noti_date"
-                android:gravity="center|left"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="asdf"
+                android:layout_alignParentBottom="true"
+
+                android:padding="10dp"
+                android:text="2018/07/16" />
+            <TextView
+                android:id="@+id/rec_date"
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:text="2018/07/13"
                 android:padding="10dp"/>
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

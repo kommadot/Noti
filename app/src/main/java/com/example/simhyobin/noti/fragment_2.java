@@ -21,8 +21,6 @@ import android.widget.Button;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,9 +45,6 @@ public class fragment_2 extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    /**
-     * 레이아웃 초기화
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
