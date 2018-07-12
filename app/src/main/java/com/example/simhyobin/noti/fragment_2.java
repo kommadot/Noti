@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,9 +28,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class fragment_2 extends Fragment {
 
@@ -49,7 +54,6 @@ public class fragment_2 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -63,25 +67,20 @@ public class fragment_2 extends Fragment {
         sortSpinner.setAdapter(sortAdapter);
         //db
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
-        dbhelper.insert();
-        final ArrayList<MessageItem> list;
+        //dbhelper.insert();
         ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
-        list=MessageItem.createContactsList(data);
+        list = MessageItem.createContactsList(data);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView.setHasFixedSize(true);
-        adapter = new MessageCardFragment(getActivity(),list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-
+        setList();
         sortSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
                 switch(position){
                     case 0:
-                        sortBynoti(list);
+                        sortByrec(list);
                         break;
                     case 1:
-                        sortByrec(list);
+                        sortBynoti(list);
                         break;
                     default:
                         break;
@@ -95,16 +94,43 @@ public class fragment_2 extends Fragment {
         return view;
     }
     public void sortBynoti(ArrayList<MessageItem> sortlist){
-        Arrays.sort(sortlist, new Comparator<MessageItem>(){
+        Collections.sort(sortlist, new Comparator<MessageItem>(){
             public int compare(MessageItem o1,MessageItem o2){
                 if(o1.getNoti_date()>o2.getNoti_date()){
                     return 1;
                 }
+                else if(o1.getNoti_date()<o2.getNoti_date()){
+                    return -1;
+
+                }
+                else return 0;
             }
         });
-
+        list=sortlist;
+        adapter.notifyItemRangeChanged(0,3);
     }
     public void sortByrec(ArrayList<MessageItem> sortlist){
+        Collections.sort(sortlist, new Comparator<MessageItem>(){
+            public int compare(MessageItem o1,MessageItem o2){
+                if(o1.getRec_date()>o2.getRec_date()){
+                    return 1;
+                }
+                else if(o1.getRec_date()<o2.getRec_date()){
+                    return -1;
 
+                }
+                else return 0;
+            }
+        });
+        list = sortlist;
+        adapter.notifyItemRangeChanged(0,3);
+    }
+    public void setList(){
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter = new MessageCardFragment(getActivity(),list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
     }
 }

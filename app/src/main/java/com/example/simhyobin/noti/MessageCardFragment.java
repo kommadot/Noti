@@ -51,8 +51,8 @@ public class MessageCardFragment extends RecyclerView.Adapter<MessageCardFragmen
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         holder.content.setText(mItems.get(position).getContent());
         holder.username.setText(mItems.get(position).getUsername());
-        holder.noti_date.setText(mItems.get(position).getNoti_date());
-        holder.rec_date.setText(mItems.get(position).getRec_date());
+        holder.noti_date.setText(String.valueOf(mItems.get(position).getNoti_date()));
+        holder.rec_date.setText(String.valueOf(mItems.get(position).getRec_date()));
     }
 
     // 데이터 셋의 크기를 리턴해줍니다.

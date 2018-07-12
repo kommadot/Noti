@@ -16,8 +16,8 @@ import java.util.Iterator;
 public class MessageItem{
     private String username;
     private String content;
-    private String noti_date,rec_date;
-    public MessageItem (String username,String content,String noti_date,String rec_date){
+    private int noti_date,rec_date;
+    public MessageItem (String username,String content,int noti_date,int rec_date){
         this.username = username;
         this.content = content;
         this.noti_date = noti_date;
@@ -30,10 +30,10 @@ public class MessageItem{
     public String getContent(){
         return content;
     }
-    public String getNoti_date(){
+    public int getNoti_date(){
         return noti_date;
     }
-    public String getRec_date(){
+    public int getRec_date(){
         return rec_date;
     }
     public static ArrayList<MessageItem> createContactsList(ArrayList<String[]> data) {
@@ -41,8 +41,8 @@ public class MessageItem{
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
             String[] temp = (String[])iterator.next();
-            contacts.add(new MessageItem(temp[1],temp[2],temp[3],temp[4]));
-
+            contacts.add(new MessageItem(temp[1],temp[2],Integer.parseInt(temp[3]),Integer.parseInt(temp[4])));
+            Log.d("mei",temp[1]);
         }
         return contacts;
     }
