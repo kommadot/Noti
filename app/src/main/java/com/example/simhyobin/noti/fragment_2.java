@@ -17,12 +17,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,9 +53,18 @@ public class fragment_2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
+
         View view = inflater.inflate(R.layout.fragment_fragment_2, container, false);
+        Spinner sortSpinner = (Spinner)view.findViewById(R.id.sortSpinner);
+        ArrayAdapter sortAdapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.sortArray, android.R.layout.simple_spinner_item);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item
+        );
+        sortSpinner.setAdapter(sortAdapter);
+        //db
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
-        ArrayList<MessageItem> list;
+        dbhelper.insert();
+        final ArrayList<MessageItem> list;
         ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
         list=MessageItem.createContactsList(data);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
@@ -58,6 +72,39 @@ public class fragment_2 extends Fragment {
         adapter = new MessageCardFragment(getActivity(),list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        sortSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
+                switch(position){
+                    case 0:
+                        sortBynoti(list);
+                        break;
+                    case 1:
+                        sortByrec(list);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent){
+
+            }
+        });
+
         return view;
+    }
+    public void sortBynoti(ArrayList<MessageItem> sortlist){
+        Arrays.sort(sortlist, new Comparator<MessageItem>(){
+            public int compare(MessageItem o1,MessageItem o2){
+                if(o1.getNoti_date()>o2.getNoti_date()){
+                    return 1;
+                }
+            }
+        });
+
+    }
+    public void sortByrec(ArrayList<MessageItem> sortlist){
+
     }
 }

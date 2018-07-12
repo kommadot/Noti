@@ -97,7 +97,7 @@ public class DBHelper extends SQLiteOpenHelper{
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         // DB에 입력한 값으로 행 추가
-        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('abcd','김철수','저는 행복합니다 님덜','20180606','20180713','hashman');");
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcd','김철수d','저는 행복합니다 님덜아아아아아앙아앙아아앙앙','2018-06-06 06:34:23','2018-07-13 08:12:33','hashman2');");
         db.close();
     }
 }

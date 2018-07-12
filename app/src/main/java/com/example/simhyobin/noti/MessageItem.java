@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class MessageItem {
+public class MessageItem{
     private String username;
     private String content;
     private String noti_date,rec_date;

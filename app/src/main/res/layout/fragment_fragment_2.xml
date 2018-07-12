@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <Spinner
+        android:id="@+id/sortSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_weight="1"/>
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recyclerview"
@@ -11,5 +16,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:clipToPadding="false"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_below="@id/sortSpinner"
+        />
 </RelativeLayout>
