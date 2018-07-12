@@ -1,6 +1,10 @@
 package com.example.simhyobin.noti;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -67,23 +71,17 @@ public class fragment_1 extends Fragment {
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
             String[] temp = (String[])iterator.next();
-            Log.d("name", temp[1]);
-            Log.d("fav", temp[2]+"test");
-
             if(temp[2].equals("0")){
                 //일반 친구
-                Log.d("test", "common");
-                Create_Usertap(list_com, temp[1], temp[3]);
+                Create_Usertap(list_com, temp[0], temp[1], temp[3]);
             }else if(temp[2].equals("1")){
                 //즐겨찾기 등록 친구
-                Log.d("test", "favorite");
-                Create_Usertap(list_fav, temp[1], temp[3]);
+                Create_Usertap(list_fav, temp[0], temp[1], temp[3]);
             }else{
-                Log.d("test", "else");
             }
         }
     }
-    public void Create_Usertap(LinearLayout parent, String name, String cnt){
+    public void Create_Usertap(LinearLayout parent, String user_id, String name, String cnt){
         RelativeLayout head = new RelativeLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
         TextView cnt_tap = new TextView(getActivity());
@@ -100,6 +98,7 @@ public class fragment_1 extends Fragment {
         name_tap.setTextSize(getDP(10));
         name_tap.setGravity(Gravity.CENTER_VERTICAL);
         name_tap.setLayoutParams(params2);
+        name_tap.setTextColor(Color.BLACK);
         name_tap.setText(name);
 
 
@@ -111,6 +110,39 @@ public class fragment_1 extends Fragment {
 
         head.addView(name_tap);
         head.addView(cnt_tap);
+        String[] dat = {user_id, name};
+        head.setTag(dat);
+
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] res = (String [])view.getTag();
+                final String user_id = String.valueOf(res[0]);
+                String user_name = String.valueOf(res[1]);
+                CharSequence[] select_item = {"메시지 보내기", "삭제", "닫기"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setTitle(user_name)
+                        .setItems(select_item, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.d("button", String.valueOf(i));
+                                if(i==0){
+                                    Intent intent = new Intent(getActivity(), frag1_sendmsg.class);
+                                    intent.putExtra("userid", String.valueOf(user_id));
+                                    startActivity(intent);
+
+                                }else if(i==1){
+
+                                }else{
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         parent.addView(head);
     }

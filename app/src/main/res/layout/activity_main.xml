@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        style="@style/Widget.Design.TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff">
-
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#0097a7"
+        android:src="@drawable/baseline_person_white_48"
+        app:borderWidth="0dp"
+        app:elevation="10dp" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tabs" />
+        android:orientation="vertical">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            style="@style/Widget.Design.TabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="7dp"
+            android:background="#ffffff">
 
-</LinearLayout>
+        </android.support.design.widget.TabLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            android:layout_below="@+id/tabs" />
+    </LinearLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
