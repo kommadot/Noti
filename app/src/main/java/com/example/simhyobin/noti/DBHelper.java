@@ -40,8 +40,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("MSG_CNT INT ); ");
 
         db.execSQL(sb.toString());
-<<<<<<< Updated upstream
-=======
+
 
         sb = new StringBuffer();
         sb.append("CREATE TABLE USER_GROUPINFO ( ");
@@ -51,8 +50,6 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("GRP_MSGCNT INT ); ");
         db.execSQL(sb.toString());
 
-
->>>>>>> Stashed changes
     }
 
     @Override
@@ -86,6 +83,8 @@ public class DBHelper extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery("SELECT * FROM USER_FRIENDS", null);
 
         ArrayList<String[]> result = new ArrayList<String[]>();
+        int i = 0;
+
         cursor.moveToFirst();
 
         while(!(cursor.isAfterLast())){
@@ -94,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper{
             temp[1] = cursor.getString(1);
             temp[2] = String.valueOf(cursor.getInt(2));
             temp[3] = String.valueOf(cursor.getInt(3));
+            temp[4] = String.valueOf(cursor.getInt(4));
             result.add(temp);
 
             cursor.moveToNext();
