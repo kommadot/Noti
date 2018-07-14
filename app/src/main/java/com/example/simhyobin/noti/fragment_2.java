@@ -1,122 +1,136 @@
 package com.example.simhyobin.noti;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+
+import android.annotation.TargetApi;
+import android.content.ClipData;
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
+
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TextView;
 import android.support.v4.app.Fragment;
-import android.widget.TimePicker;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class fragment_2 extends Fragment {
-    // Store instance variables
-    private View views;
-    // newInstance constructor for creating fragment with arguments
+
+    private RecyclerView recyclerView;
+    private MessageCardFragment adapter;
+    private ArrayList<MessageItem> list = new ArrayList<>();
+    DBHelper dbhelper;
     public static fragment_2 newInstance(int page, String title) {
         fragment_2 fragmentFirst = new fragment_2();
-
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString("someTitle", title);
+        fragmentFirst.setArguments(args);
         return fragmentFirst;
     }
-
-    // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
-    // Inflate the view for the fragment based on layout XML
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        String sec=getString(R.string.secondpage);
+                             Bundle savedInstanceState){
+
         View view = inflater.inflate(R.layout.fragment_fragment_2, container, false);
-        views=view;
-        TextView message = (TextView) view.findViewById(R.id.message);
-        Calendar calendar = Calendar.getInstance(Locale.KOREA);
-        final int year = calendar.get(Calendar.YEAR);
-        final int month = calendar.get(Calendar.MONTH);
-        final int day = calendar.get(Calendar.DAY_OF_MONTH);
-        final int minute = calendar.get(Calendar.MINUTE);
-        final int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String time;
-        int h = calendar.get(Calendar.HOUR_OF_DAY);
+        Spinner sortSpinner = (Spinner)view.findViewById(R.id.sortSpinner);
+        ArrayAdapter sortAdapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.sortArray, android.R.layout.simple_spinner_item);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item
+        );
+        sortSpinner.setAdapter(sortAdapter);
+        //db
+        dbhelper = new DBHelper(getActivity(), "data", null, 1);
+        //dbhelper.insert();
+        ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
+        list = MessageItem.createContactsList(data);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        setList();
+        sortSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
+                switch(position){
+                    case 0:
+                        sortByrec(list);
+                        break;
+                    case 1:
+                        sortBynoti(list);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent){
 
-        if (h > 12){
-            h=h-12;
-            time="오후 "+h+"시 "+minute+"분";
-        }
-        else {
-            time="오전 "+h+"시 "+minute+"분";
-        }
-        Button b = (Button) views.findViewById(R.id.timeButton);
-        b.setText(time);
-        String date;
-        int m =calendar.get(Calendar.MONTH);
-        m=m+1;
-        date=calendar.get(Calendar.YEAR)+"/"+m+"/"+calendar.get(Calendar.DAY_OF_MONTH);
-        Button bu = (Button) views.findViewById(R.id.dateButton);
-        bu.setText(date);
-        view.findViewById(R.id.timeButton).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),timeSetListener,hour,minute,false);
-
-                timePickerDialog.show();
             }
         });
-        view.findViewById(R.id.dateButton).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
 
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), dateSetListener, year, month, day);
-                datePickerDialog.show();
-            }
-        });
         return view;
     }
-    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            String date;
-            date=year+"/"+monthOfYear+"/"+dayOfMonth;
-            Button b = (Button) views.findViewById(R.id.dateButton);
-            b.setText(date);
+    public void sortBynoti(ArrayList<MessageItem> sortlist){
+        Collections.sort(sortlist, new Comparator<MessageItem>(){
+            public int compare(MessageItem o1,MessageItem o2){
+                if(o1.getNoti_date()>o2.getNoti_date()){
+                    return 1;
+                }
+                else if(o1.getNoti_date()<o2.getNoti_date()){
+                    return -1;
 
-        }
-    };
-    private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-
-        @Override
-        public void onTimeSet(TimePicker view, int hour, int minute) {
-
-            String time;
-            if (hour > 12){
-                hour= hour-12;
-                time="오후 "+hour+"시 "+minute+"분";
+                }
+                else return 0;
             }
-            else {
-                time="오전 "+hour+"시 "+minute+"분";
+        });
+        list=sortlist;
+        adapter.notifyItemRangeChanged(0,3);
+    }
+    public void sortByrec(ArrayList<MessageItem> sortlist){
+        Collections.sort(sortlist, new Comparator<MessageItem>(){
+            public int compare(MessageItem o1,MessageItem o2){
+                if(o1.getRec_date()>o2.getRec_date()){
+                    return 1;
+                }
+                else if(o1.getRec_date()<o2.getRec_date()){
+                    return -1;
+
+                }
+                else return 0;
             }
-            Button b = (Button) views.findViewById(R.id.timeButton);
-            b.setText(time);
+        });
+        list = sortlist;
+        adapter.notifyItemRangeChanged(0,3);
+    }
+    public void setList(){
 
-        }
-    };
-
-
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter = new MessageCardFragment(getActivity(),list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+    }
 }
