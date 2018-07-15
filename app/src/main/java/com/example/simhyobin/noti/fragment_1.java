@@ -1,8 +1,11 @@
 package com.example.simhyobin.noti;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -18,7 +21,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,16 +85,40 @@ public class fragment_1 extends Fragment {
         btn_addfav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dbhelper = new DBHelper(getActivity(), "data", null, 1);
+                Iterator iterator = list_selectedview.iterator();
+                while(iterator.hasNext()){
+                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    String user_id = ((String[])target.getTag())[0];
+                    dbhelper.fav_user(user_id);
+                }
+                Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                btn_adduser.startAnimation(bottomUp);
+                btn_adduser.setVisibility(View.VISIBLE);
+                idx_select = 0;
+                idx_optionbar = 0;
+                refresh();
             }
         });
 
         btn_rmuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                선택된 유저 db삭제/view삭제
-                 */
+                dbhelper = new DBHelper(getActivity(), "data", null, 1);
+                Iterator iterator = list_selectedview.iterator();
+                while(iterator.hasNext()){
+                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    String user_id = ((String[])target.getTag())[0];
+                    dbhelper.rm_user(user_id);
+                }
+                Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                btn_adduser.startAnimation(bottomUp);
+                btn_adduser.setVisibility(View.VISIBLE);
+                idx_select = 0;
+                idx_optionbar = 0;
+                refresh();
             }
         });
 
@@ -118,6 +144,11 @@ public class fragment_1 extends Fragment {
                 LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel);
                 hiddenPanel.startAnimation(bottomDown);
                 hiddenPanel.setVisibility(View.GONE);
+
+                Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                btn_adduser.startAnimation(bottomUp);
+                btn_adduser.setVisibility(View.VISIBLE);
                 idx_select = 0;
                 idx_optionbar = 0;
             }
@@ -183,30 +214,18 @@ public class fragment_1 extends Fragment {
             Log.d("fav", temp[2]+"test");
 
             if(temp[2].equals("0")){
-                //일반 친구
-<<<<<<< Updated upstream
-                Log.d("test", "common");
-                Create_Usertap(list_com, temp[1], temp[3]);
-            }else if(temp[2].equals("1")){
-                //즐겨찾기 등록 친구
-                Log.d("test", "favorite");
-                Create_Usertap(list_fav, temp[1], temp[3]);
-=======
                 Create_Usertap(list_com, temp[0], temp[1], temp[3], temp[4]);
             }else if(temp[2].equals("1")){
                 //즐겨찾기 등록 친구
                 Create_Usertap(list_fav, temp[0], temp[1], temp[3], temp[4]);
->>>>>>> Stashed changes
             }else{
                 Log.d("test", "else");
             }
         }
     }
-<<<<<<< Updated upstream
-    public void Create_Usertap(LinearLayout parent, String name, String cnt){
-=======
+
     public void Create_Usertap(LinearLayout parent, String user_id, String name, String group_num, String cnt){
->>>>>>> Stashed changes
+
         RelativeLayout head = new RelativeLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
         TextView cnt_tap = new TextView(getActivity());
@@ -224,6 +243,7 @@ public class fragment_1 extends Fragment {
         name_tap.setTextSize(getDP(10));
         name_tap.setGravity(Gravity.CENTER_VERTICAL);
         name_tap.setLayoutParams(params2);
+        name_tap.setTextColor(Color.BLACK);
         name_tap.setText(name);
 
 
@@ -235,8 +255,7 @@ public class fragment_1 extends Fragment {
 
         head.addView(name_tap);
         head.addView(cnt_tap);
-<<<<<<< Updated upstream
-=======
+
         String[] dat = {user_id, name, group_num};
         head.setTag(dat);
 
@@ -266,6 +285,12 @@ public class fragment_1 extends Fragment {
                     hiddenPanel.startAnimation(bottomUp);
 
                     hiddenPanel.setVisibility(View.VISIBLE);
+
+                    Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                    FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                    btn_adduser.startAnimation(bottomDown);
+                    btn_adduser.setVisibility(View.GONE);
+
                     idx_optionbar = 1;
 
                 }else{
@@ -273,13 +298,22 @@ public class fragment_1 extends Fragment {
                     LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel);
                     hiddenPanel.startAnimation(bottomDown);
                     hiddenPanel.setVisibility(View.GONE);
+
+                    Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                    FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                    btn_adduser.startAnimation(bottomUp);
+                    btn_adduser.setVisibility(View.VISIBLE);
+
                     idx_optionbar = 0;
                 }
             }
         });
->>>>>>> Stashed changes
 
         parent.addView(head);
+    }
+    public void refresh(){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
     }
     public int getDP(int num){
         int dp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, num, getResources().getDisplayMetrics());

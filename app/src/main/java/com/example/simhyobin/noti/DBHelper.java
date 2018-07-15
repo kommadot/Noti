@@ -37,6 +37,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("USER_ID STRING PRIMARY KEY NOT NULL, ");
         sb.append("USER_NAME STRING NOT NULL, ");
         sb.append("USER_FAV INT,");
+        sb.append("USER_GROUP INT,");
         sb.append("MSG_CNT INT ); ");
 
         db.execSQL(sb.toString());
@@ -123,6 +124,39 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         cursor.close();
         return result;
+    }
+    public void rm_user(String user_id){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT USER_GROUP FROM USER_FRIENDS WHERE USER_ID=?",new String[]{user_id});
+        cursor.moveToFirst();
+        String num_usergroup = cursor.getString(0);
+
+        if(!(num_usergroup.equals("0"))){
+            cursor = db.rawQuery("SELECT GRP_MEMCNT FROM USER_GROUPINFO WHERE GRP_NUM=?", new String[]{num_usergroup});
+            cursor.moveToFirst();
+            int memcnt = Integer.parseInt(cursor.getString(0));
+            if(memcnt-1 <= 0){
+                db.execSQL("DELETE FROM USER_GROUPINFO WHERE GRP_NUM=?",new String[]{num_usergroup});
+            }else{
+                db.execSQL("UPDATE USER_GROUPINFO SET MEMCNT=? WHERE GRP_NUM=?", new String[]{String.valueOf(memcnt-1), num_usergroup});
+            }
+        }
+
+        db.execSQL("DELETE FROM USER_FRIENDS WHERE USER_ID="+user_id);
+        db.close();
+    }
+    public void fav_user(String user_id){
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT USER_FAV FROM USER_FRIENDS WHERE USER_ID=?", new String[]{user_id});
+        cursor.moveToFirst();
+        String user_fav = cursor.getString(0);
+
+        if(user_fav.equals("0")){
+            db.execSQL("UPDATE USER_FRIENDS SET USER_FAV=1 WHERE USER_ID=?",new String[]{user_id});
+        }else{
+            db.execSQL("UPDATE USER_FRIENDS SET USER_FAV=0 WHERE USER_ID=?",new String[]{user_id});
+        }
     }
     public void test_user(){
         SQLiteDatabase db = getWritableDatabase();
