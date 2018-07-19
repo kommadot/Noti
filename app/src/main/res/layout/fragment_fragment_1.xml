@@ -90,14 +90,14 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_chat_white_48"/>
+                    android:background="@drawable/baseline_chat_white_36"/>
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:gravity="center"
                     android:textColor="@color/secondary_text"
                     android:textSize="10dp"
@@ -112,14 +112,14 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_people_white_48" />
+                    android:background="@drawable/baseline_people_white_36" />
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:gravity="center"
                     android:textColor="@color/secondary_text"
                     android:textSize="10dp"
@@ -134,14 +134,14 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_star_white_48"/>
+                    android:background="@drawable/baseline_star_white_36"/>
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:gravity="center"
                     android:textColor="@color/secondary_text"
                     android:textSize="10dp"
@@ -156,14 +156,14 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_person_add_disabled_white_48" />
+                    android:background="@drawable/baseline_person_add_disabled_white_36" />
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:gravity="center"
                     android:textColor="@color/secondary_text"
                     android:textSize="10dp"
@@ -178,14 +178,14 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_close_white_48" />
+                    android:background="@drawable/baseline_close_white_36" />
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="18dp"
                     android:gravity="center"
                     android:textColor="@color/secondary_text"
                     android:textSize="10dp"

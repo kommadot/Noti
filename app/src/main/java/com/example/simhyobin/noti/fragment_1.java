@@ -1,6 +1,7 @@
 package com.example.simhyobin.noti;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -79,6 +80,17 @@ public class fragment_1 extends Fragment {
                 /*
                 메시지 전송 액티비티로 list_selectedview를 넘겨줌
                  */
+                ArrayList<String[]> send_data = new ArrayList<String[]>();
+                Iterator iterator = list_selectedview.iterator();
+                while(iterator.hasNext()){
+                    String[] tempdata = new String[2];
+                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    tempdata = (String[])target.getTag();
+                    send_data.add(tempdata);
+                }
+                Intent intent = new Intent(getActivity(), activity_sendmsg.class);
+                intent.putExtra("data",send_data);
+                startActivity(intent);
             }
         });
 
