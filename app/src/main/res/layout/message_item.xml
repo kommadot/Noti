@@ -10,7 +10,6 @@
         android:layout_height="200dp"
         card:cardBackgroundColor="@android:color/white"
         card:cardElevation="4dp"
-
         card:cardUseCompatPadding="true">
 
         <RelativeLayout
