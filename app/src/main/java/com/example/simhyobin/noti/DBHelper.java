@@ -27,6 +27,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sb2.append("USER_ID STRING NOT NULL,");
         sb2.append("USER_NAME STRING NOT NULL,");
         sb2.append("CONTENT STRING NOT NULL,");
+        sb2.append("TITLE STRING NOT NULL,");
         sb2.append("RECEIVE_DATE int,");
         sb2.append("NOTI_DATE int,");
         sb2.append("UNIQUE_HASH STRING PRIMARY KEY);");
@@ -111,15 +112,17 @@ public class DBHelper extends SQLiteOpenHelper{
         cursor.moveToFirst();
 
         while(!(cursor.isAfterLast())){
-            String[] temp = new String[6];
+            String[] temp = new String[7];
             temp[0] = cursor.getString(0);
             temp[1] = cursor.getString(1);
             temp[2] = cursor.getString(2);
-            temp[3] = String.valueOf(cursor.getInt(3));
+            temp[3] = cursor.getString(3);
             temp[4] = String.valueOf(cursor.getInt(4));
-            temp[5] = cursor.getString(5);
+            temp[5] = String.valueOf(cursor.getInt(5));
+            temp[6] = cursor.getString(6);
             result.add(temp);
-
+            Log.d("db noti",temp[4]);
+            Log.d("db rec",temp[5]);
             cursor.moveToNext();
         }
         cursor.close();
@@ -180,9 +183,9 @@ public class DBHelper extends SQLiteOpenHelper{
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         // DB에 입력한 값으로 행 추가
-        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcd','김철수d','blahblahblahblahblahblahblahblahblahblahblahblahblah','1372339860','1372339860','hashman2');");
-        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','송인석','blahblahblahblahblahblahblahblahblahblahblahblahblah','1372339830','1372339120','hashm22an2');");
-        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','심효빈','blahblahblahblahblahblahblahblahblahblahblahblahblah','1372339850','1372339990','hashm22an22');");
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcd','김철수d','blahblahblahblahblahblahblahblahblahblahblahblahblah','똥쌀시간','1532076593','1532076500','hashman2');");
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','송인석','blahblahblahblahblahblahblahblahblahblahblahblahblah','똥쌀시간','1372339830','1372339120','hashm22an2');");
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','심효빈','blahblahblahblahblahblahblahblahblahblahblahblahblah','똥쌀시간','1372339850','1372339990','hashm22an22');");
         db.close();
     }
 }

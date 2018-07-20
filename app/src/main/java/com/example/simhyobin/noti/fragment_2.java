@@ -4,6 +4,7 @@ package com.example.simhyobin.noti;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -102,10 +104,10 @@ public class fragment_2 extends Fragment {
         Collections.sort(sortlist, new Comparator<MessageItem>(){
             public int compare(MessageItem o1,MessageItem o2){
                 if(o1.getNoti_date()>o2.getNoti_date()){
-                    return 1;
+                    return -1;
                 }
                 else if(o1.getNoti_date()<o2.getNoti_date()){
-                    return -1;
+                    return 1;
 
                 }
                 else return 0;
@@ -118,10 +120,10 @@ public class fragment_2 extends Fragment {
         Collections.sort(sortlist, new Comparator<MessageItem>(){
             public int compare(MessageItem o1,MessageItem o2){
                 if(o1.getRec_date()>o2.getRec_date()){
-                    return 1;
+                    return -1;
                 }
                 else if(o1.getRec_date()<o2.getRec_date()){
-                    return -1;
+                    return 1;
 
                 }
                 else return 0;
@@ -140,12 +142,36 @@ public class fragment_2 extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd HH:mm");
                 Log.d("komad",String.valueOf(position));
+                Intent intent = new Intent(getActivity(), detail_msg.class);
+                intent.putExtra("content",list.get(position).getContent());
+                intent.putExtra("username",list.get(position).getUsername());
+                intent.putExtra("title",list.get(position).getTitle());
+                java.util.Date Notitime = new java.util.Date((long)list.get(position).getNoti_date()*1000);
+                java.util.Date Rectime = new java.util.Date((long)list.get(position).getRec_date()*1000);
+                String toNoti = transFormat.format(Notitime);
+                String toRec = transFormat.format(Rectime);
+                intent.putExtra("notidate",toNoti);
+                intent.putExtra("recdate",toRec);
+                startActivity(intent);
             }
 
             @Override
             public void onLongItemClick(View view, int position) {
-
+                SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd HH:mm");
+                Log.d("komad",String.valueOf(position));
+                Intent intent = new Intent(getActivity(), detail_msg.class);
+                intent.putExtra("content",list.get(position).getContent());
+                intent.putExtra("username",list.get(position).getUsername());
+                intent.putExtra("title",list.get(position).getTitle());
+                java.util.Date Notitime = new java.util.Date((long)list.get(position).getNoti_date()*1000);
+                java.util.Date Rectime = new java.util.Date((long)list.get(position).getRec_date()*1000);
+                String toNoti = transFormat.format(Notitime);
+                String toRec = transFormat.format(Rectime);
+                intent.putExtra("notidate",toNoti);
+                intent.putExtra("recdate",toRec);
+                startActivity(intent);
             }
         }));
 

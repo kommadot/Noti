@@ -51,13 +51,16 @@ public class MessageCardFragment extends RecyclerView.Adapter<MessageCardFragmen
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        holder.content.setText(mItems.get(position).getContent());
+        holder.title.setText(mItems.get(position).getTitle());
         holder.username.setText(mItems.get(position).getUsername());
-        java.util.Date Notitime = new java.util.Date((long)mItems.get(position).getNoti_date());
-        java.util.Date Rectime = new java.util.Date((long)mItems.get(position).getRec_date());
+        java.util.Date Notitime = new java.util.Date((long)mItems.get(position).getNoti_date()*1000);
+
+        java.util.Date Rectime = new java.util.Date((long)mItems.get(position).getRec_date()*1000);
         String toNoti = transFormat.format(Notitime);
         holder.noti_date.setText(toNoti);
         String toRec = transFormat.format(Rectime);
+        Log.d("cardView noti",toNoti);
+        Log.d("cardView rec",toRec);
         holder.rec_date.setText(toRec);
     }
     // 데이터 셋의 크기를 리턴해줍니다.
@@ -69,13 +72,13 @@ public class MessageCardFragment extends RecyclerView.Adapter<MessageCardFragmen
     // 커스텀 뷰홀더
 // item layout 에 존재하는 위젯들을 바인딩합니다.
     class ItemViewHolder extends RecyclerView.ViewHolder{
-        public TextView content;
+        public TextView title;
         public TextView username;
         public TextView rec_date;
         public TextView noti_date;
         public ItemViewHolder(View itemView) {
             super(itemView);
-            content = (TextView) itemView.findViewById(R.id.content);
+            title = (TextView) itemView.findViewById(R.id.title);
             username = (TextView) itemView.findViewById(R.id.username);
             rec_date = (TextView) itemView.findViewById(R.id.rec_date);
             noti_date = (TextView) itemView.findViewById(R.id.noti_date);
