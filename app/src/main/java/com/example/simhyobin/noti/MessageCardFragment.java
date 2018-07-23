@@ -59,8 +59,6 @@ public class MessageCardFragment extends RecyclerView.Adapter<MessageCardFragmen
         String toNoti = transFormat.format(Notitime);
         holder.noti_date.setText(toNoti);
         String toRec = transFormat.format(Rectime);
-        Log.d("cardView noti",toNoti);
-        Log.d("cardView rec",toRec);
         holder.rec_date.setText(toRec);
     }
     // 데이터 셋의 크기를 리턴해줍니다.

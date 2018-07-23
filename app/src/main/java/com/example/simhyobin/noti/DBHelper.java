@@ -19,7 +19,6 @@ public class DBHelper extends SQLiteOpenHelper{
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, name, factory, version);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db){
         StringBuffer sb2 = new StringBuffer();
@@ -121,8 +120,6 @@ public class DBHelper extends SQLiteOpenHelper{
             temp[5] = String.valueOf(cursor.getInt(5));
             temp[6] = cursor.getString(6);
             result.add(temp);
-            Log.d("db noti",temp[4]);
-            Log.d("db rec",temp[5]);
             cursor.moveToNext();
         }
         cursor.close();
@@ -149,6 +146,11 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("DELETE FROM USER_FRIENDS WHERE USER_ID="+user_id);
         db.close();
     }
+    public void rm_message(String hash){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM RECEIVE_MESSAGE WHERE UNIQUE_HASH='"+hash+"'");
+        db.close();
+    }
     public void fav_user(String user_id){
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT USER_FAV FROM USER_FRIENDS WHERE USER_ID=?", new String[]{user_id});
@@ -171,6 +173,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"FFFFFF\", \"조우석\", 0, 2, 8);");
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"111111\", \"홍길동\", 0, 0, 8);");
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"222222\", \"아아아\", 0, 0, 8);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"444444\", \"박세희\", 0, 2, 13);");
         db.close();
     }
     public void test_group(){

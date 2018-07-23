@@ -44,14 +44,12 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 public class fragment_2 extends Fragment {
 
     private RecyclerView recyclerView;
-    private MessageCardFragment adapter;
+    public MessageCardFragment adapter;
     private ArrayList<MessageItem> list = new ArrayList<>();
     DBHelper dbhelper;
     public static fragment_2 newInstance(int page, String title) {
         fragment_2 fragmentFirst = new fragment_2();
         Bundle args = new Bundle();
-        args.putInt("someInt", page);
-        args.putString("someTitle", title);
         fragmentFirst.setArguments(args);
         return fragmentFirst;
     }
@@ -114,7 +112,7 @@ public class fragment_2 extends Fragment {
             }
         });
         list=sortlist;
-        adapter.notifyItemRangeChanged(0,3);
+        adapter.notifyItemRangeChanged(0,sortlist.size());
     }
     public void sortByrec(ArrayList<MessageItem> sortlist){
         Collections.sort(sortlist, new Comparator<MessageItem>(){
@@ -130,7 +128,8 @@ public class fragment_2 extends Fragment {
             }
         });
         list = sortlist;
-        adapter.notifyItemRangeChanged(0,3);
+        adapter.notifyItemRangeChanged(0,sortlist.size());
+
     }
     public void setList(){
 
@@ -143,7 +142,6 @@ public class fragment_2 extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd HH:mm");
-                Log.d("komad",String.valueOf(position));
                 Intent intent = new Intent(getActivity(), detail_msg.class);
                 intent.putExtra("content",list.get(position).getContent());
                 intent.putExtra("username",list.get(position).getUsername());
@@ -154,13 +152,16 @@ public class fragment_2 extends Fragment {
                 String toRec = transFormat.format(Rectime);
                 intent.putExtra("notidate",toNoti);
                 intent.putExtra("recdate",toRec);
-                startActivity(intent);
+                intent.putExtra("userid",list.get(position).getUserid());
+                intent.putExtra("hash",list.get(position).getHash());
+                intent.putExtra("position",position);
+                startActivityForResult(intent,1);
+
             }
 
             @Override
             public void onLongItemClick(View view, int position) {
                 SimpleDateFormat transFormat = new SimpleDateFormat("MM-dd HH:mm");
-                Log.d("komad",String.valueOf(position));
                 Intent intent = new Intent(getActivity(), detail_msg.class);
                 intent.putExtra("content",list.get(position).getContent());
                 intent.putExtra("username",list.get(position).getUsername());
@@ -171,10 +172,25 @@ public class fragment_2 extends Fragment {
                 String toRec = transFormat.format(Rectime);
                 intent.putExtra("notidate",toNoti);
                 intent.putExtra("recdate",toRec);
-                startActivity(intent);
+                intent.putExtra("userid",list.get(position).getUserid());
+                intent.putExtra("hash",list.get(position).getHash());
+                intent.putExtra("position",position);
+                startActivityForResult(intent,1);
             }
         }));
 
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode== 1){
+            if(data.getStringExtra("rm").equals("Y")){//use data
+                list.remove(data.getIntExtra("position",-1));
+                adapter.notifyItemRemoved(data.getIntExtra("position",-1));
+                //TODO
+            }
+        }
     }
 }
 class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
