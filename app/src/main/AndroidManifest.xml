@@ -28,6 +28,10 @@
         <activity
             android:name=".activity_sendmsg"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity_grp"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".detail_msg"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -140,6 +140,17 @@ public class fragment_1 extends Fragment {
                 /*
                 그루핑 액티비티로 list_selectedview
                  */
+                ArrayList<String[]> send_data = new ArrayList<String[]>();
+                Iterator iterator = list_selectedview.iterator();
+                while(iterator.hasNext()){
+                    String[] tempdata = new String[2];
+                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    tempdata = (String[])target.getTag();
+                    send_data.add(tempdata);
+                }
+                Intent intent = new Intent(getActivity(), activity_grp.class);
+                intent.putExtra("data",send_data);
+                startActivity(intent);
             }
         });
 
@@ -188,6 +199,7 @@ public class fragment_1 extends Fragment {
 
         params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(50));
         head.setPadding(getDP(10),getDP(5), getDP(10), getDP(5));
+        head.setBackground(getResources().getDrawable(R.drawable.border, null));
         head.setLayoutParams(params1);
 
         params2 = new RelativeLayout.LayoutParams(getDP(150), ViewGroup.LayoutParams.MATCH_PARENT);
@@ -234,8 +246,20 @@ public class fragment_1 extends Fragment {
                 Log.d("test", "else");
             }
         }
+        Create_Dumb(list_com);
     }
+    public void Create_Dumb(LinearLayout parent){
+        RelativeLayout head = new RelativeLayout(getActivity());
+        LinearLayout.LayoutParams params1;
 
+        params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(60));
+        head.setPadding(getDP(10),getDP(5), getDP(10), getDP(5));
+
+        head.setBackgroundColor(getResources().getColor(R.color.white, null));
+        head.setLayoutParams(params1);
+
+        parent.addView(head);
+    }
     public void Create_Usertap(LinearLayout parent, String user_id, String name, String group_num, String cnt){
 
         RelativeLayout head = new RelativeLayout(getActivity());
