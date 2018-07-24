@@ -3,8 +3,16 @@ package com.example.simhyobin.noti;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,11 +33,13 @@ public class activity_grp extends AppCompatActivity{
 
         ArrayList<String[]> data = (ArrayList<String[]>)intent.getSerializableExtra("data");
         int user_cnt = data.size();
-        int i=0;
-        String[] list_name = new String[user_cnt];
-        String[] list_id = new String[user_cnt];
 
-        Iterator<String[]> iterator = data.iterator();
+        final Iterator<String[]> iterator = data.iterator();
+        while(iterator.hasNext()){
+            String[] tempdata = iterator.next();
+
+            CreateUserList(tempdata[0], tempdata[1]);
+        }
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsingtoolbar_grp);
         collapsingToolbarLayout.setTitle("새 그룹 만들기");
@@ -50,6 +60,87 @@ public class activity_grp extends AppCompatActivity{
                 finish();
             }
         });
+
+        android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton)findViewById(R.id.fab_grp);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayout head = (LinearLayout)findViewById(R.id.grp_userlist);
+
+                ArrayList<String[]> data = new ArrayList<String[]>();
+
+                ArrayList<View> child_views = new ArrayList<>();
+                head.findViewsWithText(child_views, "selected", View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+
+               for(int i=0; i<child_views.size(); i++){
+                   LinearLayout temp = (LinearLayout)child_views.get(i);
+                   data.add((String[])temp.getTag());
+               }
+                DBHelper dbHelper = new DBHelper(activity_grp.this, "data", null, 1);
+                EditText editText = (EditText)findViewById(R.id.grp_name);
+                String grp_name = editText.getText().toString();
+                dbHelper.group_user(data, grp_name);
+
+            }
+        });
     }
 
+    public void CreateUserList(String user_id, String user_name){
+        LinearLayout head = (LinearLayout)findViewById(R.id.grp_userlist);
+
+        LinearLayout frag_head = new LinearLayout(activity_grp.this);
+        final android.support.v7.widget.AppCompatCheckBox checkBox = new android.support.v7.widget.AppCompatCheckBox(activity_grp.this);
+        TextView name_view = new TextView(activity_grp.this);
+
+        String[] tag_data = {user_name, user_id};
+
+        LinearLayout.LayoutParams params1;
+        params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(60));
+
+        frag_head.setLayoutParams(params1);
+        frag_head.setOrientation(LinearLayout.HORIZONTAL);
+        frag_head.setContentDescription("selected");
+
+        params1 = new LinearLayout.LayoutParams(getDP(60), ViewGroup.LayoutParams.MATCH_PARENT);
+        checkBox.setLayoutParams(params1);
+        checkBox.setChecked(true);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkBox.isChecked()){
+                    LinearLayout parent = (LinearLayout)view.getParent();
+                    parent.setBackgroundColor(getResources().getColor(R.color.white, null));
+                    TextView textView = (TextView)parent.getChildAt(1);
+                    textView.setTextColor(getResources().getColor(R.color.black, null));
+                    parent.setContentDescription("selected");
+
+                }else{
+                    LinearLayout parent = (LinearLayout)view.getParent();
+                    parent.setBackgroundColor(getResources().getColor(R.color.divider, null));
+                    TextView textView = (TextView)parent.getChildAt(1);
+                    textView.setTextColor(getResources().getColor(R.color.white, null));
+                    parent.setContentDescription("unselect");
+                }
+            }
+        });
+
+        params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        name_view.setLayoutParams(params1);
+        name_view.setGravity(Gravity.CENTER_VERTICAL);
+        name_view.setTextColor(getResources().getColor(R.color.black, null));
+        name_view.setText(user_name);
+
+        frag_head.addView(checkBox);
+        frag_head.addView(name_view);
+        frag_head.setTag(tag_data);
+
+
+        head.addView(frag_head);
+
+    }
+    public int getDP(int num){
+        int dp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, num, getResources().getDisplayMetrics());
+        return dp;
+    }
 }

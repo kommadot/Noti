@@ -36,7 +36,9 @@ public class fragment_1 extends Fragment {
     private int page;
     private DBHelper dbhelper;
     private int idx_select = 0;
-    private int idx_optionbar = 0;
+    private boolean idx_select_grp = false;
+    private boolean idx_optionbar = false;
+    private boolean idx_optionbar_grp = false;
     private ArrayList<View> list_selectedview = new ArrayList<View>();
 
     // newInstance constructor for creating fragment with arguments
@@ -73,7 +75,8 @@ public class fragment_1 extends Fragment {
         LinearLayout btn_rmuser = (LinearLayout)view.findViewById(R.id.btn_rmuser);
         LinearLayout btn_unselect = (LinearLayout)view.findViewById(R.id.btn_unselect);
         LinearLayout btn_group = (LinearLayout)view.findViewById(R.id.btn_grping);
-
+        FloatingActionButton btn_adduser = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        btn_adduser.setSelected(true);
         btn_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +112,7 @@ public class fragment_1 extends Fragment {
                 btn_adduser.startAnimation(bottomUp);
                 btn_adduser.setVisibility(View.VISIBLE);
                 idx_select = 0;
-                idx_optionbar = 0;
+                idx_optionbar = false;
                 refresh();
             }
         });
@@ -129,7 +132,7 @@ public class fragment_1 extends Fragment {
                 btn_adduser.startAnimation(bottomUp);
                 btn_adduser.setVisibility(View.VISIBLE);
                 idx_select = 0;
-                idx_optionbar = 0;
+                idx_optionbar = false;
                 refresh();
             }
         });
@@ -173,7 +176,7 @@ public class fragment_1 extends Fragment {
                 btn_adduser.startAnimation(bottomUp);
                 btn_adduser.setVisibility(View.VISIBLE);
                 idx_select = 0;
-                idx_optionbar = 0;
+                idx_optionbar = false;
             }
         });
         return view;
@@ -190,7 +193,7 @@ public class fragment_1 extends Fragment {
         }
     }
     public void Create_Grouptap(LinearLayout parent, String group_num, String group_name, String mem_cnt, String msg_cnt){
-        RelativeLayout head = new RelativeLayout(getActivity());
+        final RelativeLayout head = new RelativeLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
         TextView cnt_tap = new TextView(getActivity());
 
@@ -217,6 +220,86 @@ public class fragment_1 extends Fragment {
         cnt_tap.setLayoutParams(params2);
         cnt_tap.setText(msg_cnt);
 
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(idx_optionbar == true){
+
+                    list_selectedview.clear();
+
+                    LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_favorite);
+                    for(int i=0; i<head_layout.getChildCount(); i++){
+                        RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                        if(target.isSelected()){
+                            target.setSelected(false);
+                            target.setBackground(getResources().getDrawable(R.drawable.border, null));
+                        }
+                    }
+
+                    head_layout = (LinearLayout)getActivity().findViewById(R.id.user_common);
+                    for(int i=0; i<head_layout.getChildCount(); i++){
+                        RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                        if(target.isSelected()){
+                            target.setSelected(false);
+                            target.setBackground(getResources().getDrawable(R.drawable.border, null));
+                        }
+                    }
+                    Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                    LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel);
+                    hiddenPanel.startAnimation(bottomDown);
+                    hiddenPanel.setVisibility(View.GONE);
+
+                    idx_select = 0;
+                    idx_optionbar = false;
+                }
+
+                if(view.isSelected()){
+                    idx_select_grp = false;
+                    view.setSelected(false);
+                    view.setBackground(getResources().getDrawable(R.drawable.border, null));
+
+                    Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                    LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel_grp);
+                    hiddenPanel.startAnimation(bottomDown);
+                    hiddenPanel.setVisibility(View.GONE);
+
+                    Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                    FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                    if(!(btn_adduser.isSelected())){
+                        btn_adduser.startAnimation(bottomUp);
+                        btn_adduser.setVisibility(View.VISIBLE);
+                        btn_adduser.setSelected(true);
+                    }
+
+
+                    idx_optionbar_grp = false;
+
+                }else{
+                    idx_select_grp = true;
+                    view.setSelected(true);
+                    view.setBackgroundColor(getResources().getColor(R.color.primary_light, null));
+
+                    Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                    LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel_grp);
+                    hiddenPanel.startAnimation(bottomUp);
+
+                    hiddenPanel.setVisibility(View.VISIBLE);
+
+                    Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                    FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+
+                    if(btn_adduser.isSelected()) {
+                        btn_adduser.startAnimation(bottomDown);
+                        btn_adduser.setVisibility(View.GONE);
+                        btn_adduser.setSelected(false);
+                    }
+
+                    idx_optionbar_grp = true;
+                }
+
+            }
+        });
+
         head.addView(name_tap);
         head.addView(cnt_tap);
         String[] dat = {group_num, group_name, mem_cnt, msg_cnt};
@@ -238,10 +321,10 @@ public class fragment_1 extends Fragment {
             Log.d("fav", temp[2]+"test");
 
             if(temp[2].equals("0")){
-                Create_Usertap(list_com, temp[0], temp[1], temp[3], temp[4]);
+                Create_Usertap(list_com, temp[0], temp[1], temp[3]);
             }else if(temp[2].equals("1")){
                 //즐겨찾기 등록 친구
-                Create_Usertap(list_fav, temp[0], temp[1], temp[3], temp[4]);
+                Create_Usertap(list_fav, temp[0], temp[1], temp[3]);
             }else{
                 Log.d("test", "else");
             }
@@ -260,7 +343,7 @@ public class fragment_1 extends Fragment {
 
         parent.addView(head);
     }
-    public void Create_Usertap(LinearLayout parent, String user_id, String name, String group_num, String cnt){
+    public void Create_Usertap(LinearLayout parent, String user_id, String name, String cnt){
 
         RelativeLayout head = new RelativeLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
@@ -292,12 +375,31 @@ public class fragment_1 extends Fragment {
         head.addView(name_tap);
         head.addView(cnt_tap);
 
-        String[] dat = {user_id, name, group_num};
+        String[] dat = {user_id, name};
         head.setTag(dat);
 
         head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(idx_optionbar_grp == true){
+
+                    LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_group);
+                    for(int i=0; i<head_layout.getChildCount(); i++){
+                        RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                        if(target.isSelected()){
+                            target.setSelected(false);
+                            target.setBackground(getResources().getDrawable(R.drawable.border, null));
+                        }
+                    }
+
+                    Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                    LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel_grp);
+                    hiddenPanel.startAnimation(bottomDown);
+                    hiddenPanel.setVisibility(View.GONE);
+                    idx_optionbar_grp = false;
+                }
+
+
                 if(view.isSelected()){
                     idx_select--;
                     view.setSelected(false);
@@ -312,22 +414,25 @@ public class fragment_1 extends Fragment {
 
                 if(idx_select > 0){
 
-                    if(idx_optionbar == 1){
+                    if(idx_optionbar == true){
                         return;
                     }
                     Animation bottomUp = AnimationUtils.loadAnimation(getContext(),
                             R.anim.bottom_up);
                     LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel);
                     hiddenPanel.startAnimation(bottomUp);
-
                     hiddenPanel.setVisibility(View.VISIBLE);
 
                     Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
-                    FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-                    btn_adduser.startAnimation(bottomDown);
-                    btn_adduser.setVisibility(View.GONE);
+                    FloatingActionButton btn_adduser = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                    if(btn_adduser.isSelected()) {
+                        btn_adduser.startAnimation(bottomDown);
+                        btn_adduser.setVisibility(View.GONE);
+                        btn_adduser.setSelected(false);
+                    }
 
-                    idx_optionbar = 1;
+
+                    idx_optionbar = true;
 
                 }else{
                     Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
@@ -337,10 +442,13 @@ public class fragment_1 extends Fragment {
 
                     Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
                     FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-                    btn_adduser.startAnimation(bottomUp);
-                    btn_adduser.setVisibility(View.VISIBLE);
+                    if(!(btn_adduser.isSelected())){
+                        btn_adduser.startAnimation(bottomUp);
+                        btn_adduser.setVisibility(View.VISIBLE);
+                        btn_adduser.setSelected(true);
+                    }
 
-                    idx_optionbar = 0;
+                    idx_optionbar = false;
                 }
             }
         });

@@ -2,12 +2,14 @@ package com.example.simhyobin.noti;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -37,7 +39,6 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("USER_ID STRING PRIMARY KEY NOT NULL, ");
         sb.append("USER_NAME STRING NOT NULL, ");
         sb.append("USER_FAV INT,");
-        sb.append("USER_GROUP INT,");
         sb.append("MSG_CNT INT ); ");
 
         db.execSQL(sb.toString());
@@ -49,6 +50,12 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("GRP_NAME STRING NOT NULL ,");
         sb.append("GRP_MEMCNT INT,");
         sb.append("GRP_MSGCNT INT ); ");
+        db.execSQL(sb.toString());
+
+        sb = new StringBuffer();
+        sb.append("CREATE TABLE USER_GROUPMEM (");
+        sb.append("USER_ID STRING, ");
+        sb.append("GRP_NUM INTEGER );");
         db.execSQL(sb.toString());
 
     }
@@ -94,7 +101,6 @@ public class DBHelper extends SQLiteOpenHelper{
             temp[1] = cursor.getString(1);
             temp[2] = String.valueOf(cursor.getInt(2));
             temp[3] = String.valueOf(cursor.getInt(3));
-            temp[4] = String.valueOf(cursor.getInt(4));
             result.add(temp);
 
             cursor.moveToNext();
@@ -163,17 +169,48 @@ public class DBHelper extends SQLiteOpenHelper{
             db.execSQL("UPDATE USER_FRIENDS SET USER_FAV=0 WHERE USER_ID=?",new String[]{user_id});
         }
     }
+    public void group_user(ArrayList<String[]> data, String grp_name){
+
+
+
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT GRP_NUM FROM USER_GROUPINFO ORDER BY GRP_NUM DESC", null);
+        int grp_num;
+
+        try{
+            cursor.moveToFirst();
+            grp_num = Integer.parseInt(cursor.getString(0))+1;
+        }catch (CursorIndexOutOfBoundsException e){
+            grp_num = 1;
+        }
+
+
+        int mem_cnt = data.size();
+
+        db.execSQL("INSERT INTO USER_GROUPINFO VALUES(?,  ? , ?, 0);", new String[]{String.valueOf(grp_num), grp_name, String.valueOf(mem_cnt)});
+
+
+
+        Iterator<String[]> iterator = data.iterator();
+
+        while(iterator.hasNext()){
+            String[] tempdata = iterator.next();
+            // 0 : name 1 : ID
+            db.execSQL("INSERT INTO USER_GROUPMEM VALUES(?, ?);", new String[]{tempdata[1], String.valueOf(grp_num)});
+        }
+        db.close();
+    }
     public void test_user(){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"AAAAAA\", \"송인석\", 0, 0, 5);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"BBBBBB\", \"심효빈\", 0, 1, 15);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"CCCCCC\", \"최호수\", 1, 1, 2);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"DDDDDD\", \"양경석\", 1, 0, 6);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"EEEEEE\", \"양찬모\", 0, 2, 6);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"FFFFFF\", \"조우석\", 0, 2, 8);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"111111\", \"홍길동\", 0, 0, 8);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"222222\", \"아아아\", 0, 0, 8);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"444444\", \"박세희\", 0, 2, 13);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"AAAAAA\", \"송인석\", 0,  5);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"BBBBBB\", \"심효빈\", 0,  15);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"CCCCCC\", \"최호수\", 1,  2);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"DDDDDD\", \"양경석\", 1,  6);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"EEEEEE\", \"양찬모\", 0,  6);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"FFFFFF\", \"조우석\", 0,  8);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"111111\", \"홍길동\", 0,  8);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"222222\", \"아아아\", 0,  8);");
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"444444\", \"박세희\", 0,  13);");
         db.close();
     }
     public void test_group(){
