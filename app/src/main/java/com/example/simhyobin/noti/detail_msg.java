@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
-/**
- * Created by insec on 2018-07-15.
- */
+
 
 public class detail_msg  extends AppCompatActivity{
     DBHelper dbhelper;
@@ -72,6 +70,8 @@ public class detail_msg  extends AppCompatActivity{
     }
     @Override
     public void onBackPressed(){
+        intent.putExtra("rm", "N");
+        setResult(RESULT_OK,intent);
         super.onBackPressed();
 
     }
