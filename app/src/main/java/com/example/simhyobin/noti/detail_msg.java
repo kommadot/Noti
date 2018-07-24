@@ -72,6 +72,8 @@ public class detail_msg  extends AppCompatActivity{
     }
     @Override
     public void onBackPressed(){
+        intent.putExtra("rm", "N");
+        setResult(RESULT_OK,intent);
         super.onBackPressed();
 
     }
