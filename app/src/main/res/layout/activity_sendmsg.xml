@@ -36,10 +36,12 @@
 
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedscrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
+
             android:paddingTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -65,10 +67,12 @@
                             android:drawableStart="@drawable/baseline_label_black_24"
                             android:drawableTint="@color/divider"
                             android:drawablePadding="10dp"
+                            android:singleLine="true"
                             android:hint="제목"/>
                     </android.support.design.widget.TextInputLayout>
                 </FrameLayout>
                 <FrameLayout
+                    android:descendantFocusability="blocksDescendants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp">
@@ -77,16 +81,19 @@
                         android:layout_height="wrap_content"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
                         <EditText
+                            android:id="@+id/textbox_date"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:drawableLeft="@drawable/baseline_event_white_24"
                             android:drawableStart="@drawable/baseline_event_white_24"
                             android:drawableTint="@color/divider"
                             android:drawablePadding="10dp"
+                            android:focusable="false"
                             android:hint="날짜"/>
                     </android.support.design.widget.TextInputLayout>
                 </FrameLayout>
                 <FrameLayout
+                    android:descendantFocusability="blocksDescendants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp">
@@ -95,12 +102,14 @@
                         android:layout_height="wrap_content"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
                         <EditText
+                            android:id="@+id/textbox_time"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:drawableLeft="@drawable/baseline_access_alarm_white_24"
                             android:drawableStart="@drawable/baseline_access_alarm_white_24"
                             android:drawableTint="@color/divider"
                             android:drawablePadding="10dp"
+                            android:focusable="false"
                             android:hint="시간"/>
                     </android.support.design.widget.TextInputLayout>
                 </FrameLayout>
@@ -122,8 +131,95 @@
                             android:hint="세부 내용"/>
                     </android.support.design.widget.TextInputLayout>
                 </FrameLayout>
+
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/expand_image"
+                    android:backgroundTint="@color/divider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/baseline_expand_more_black_24"
+                    />
+
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/menu_extra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="5dp">
+                        <FrameLayout
+                            android:descendantFocusability="blocksDescendants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="20dp">
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                                <EditText
+                                    android:id="@+id/textbox_alarmcnt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:drawableLeft="@drawable/baseline_add_alarm_black_24"
+                                    android:drawableStart="@drawable/baseline_add_alarm_black_24"
+                                    android:drawableTint="@color/divider"
+                                    android:drawablePadding="10dp"
+                                    android:focusable="false"
+                                    android:hint="알람 횟수"/>
+                            </android.support.design.widget.TextInputLayout>
+                        </FrameLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp">
+                        <FrameLayout
+                            android:descendantFocusability="blocksDescendants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="20dp">
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                                <EditText
+                                    android:id="@+id/textbox_alarmcycle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:drawableLeft="@drawable/baseline_history_black_24"
+                                    android:drawableStart="@drawable/baseline_history_black_24"
+                                    android:drawableTint="@color/divider"
+                                    android:drawablePadding="10dp"
+                                    android:focusable="false"
+                                    android:hint="알람 주기"/>
+                            </android.support.design.widget.TextInputLayout>
+                        </FrameLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

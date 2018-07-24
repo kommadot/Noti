@@ -86,15 +86,20 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
-                <ImageView
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_chat_white_36"/>
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/baseline_chat_white_48"/>
+                </RelativeLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
@@ -108,15 +113,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
-                <ImageView
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_people_white_36" />
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/baseline_people_white_48"/>
+                </RelativeLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
@@ -130,15 +139,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
-                <ImageView
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_star_white_36"/>
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/baseline_star_white_48"/>
+                </RelativeLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
@@ -152,15 +165,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
-                <ImageView
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_person_add_disabled_white_36" />
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/baseline_person_add_disabled_white_48"/>
+                </RelativeLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
@@ -174,15 +191,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_weight="1">
-                <ImageView
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/baseline_close_white_36" />
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/baseline_close_white_48"/>
+                </RelativeLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="18dp"
