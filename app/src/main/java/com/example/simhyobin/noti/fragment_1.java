@@ -75,6 +75,95 @@ public class fragment_1 extends Fragment {
         LinearLayout btn_rmuser = (LinearLayout)view.findViewById(R.id.btn_rmuser);
         LinearLayout btn_unselect = (LinearLayout)view.findViewById(R.id.btn_unselect);
         LinearLayout btn_group = (LinearLayout)view.findViewById(R.id.btn_grping);
+
+        LinearLayout btn_grp_info = (LinearLayout)view.findViewById(R.id.btn_info_grp);
+        LinearLayout btn_grp_msg = (LinearLayout)view.findViewById(R.id.btn_message_grp);
+        LinearLayout btn_grp_modify = (LinearLayout)view.findViewById(R.id.btn_modify_grp);
+        LinearLayout btn_grp_rm = (LinearLayout)view.findViewById(R.id.btn_rm_grp);
+        LinearLayout btn_grp_unselect = (LinearLayout)view.findViewById(R.id.btn_unselect_grp);
+
+
+
+        btn_grp_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        btn_grp_msg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_group);
+                String[] tag_data = new String[3];
+                for(int i=0; i<head_layout.getChildCount(); i++){
+                    RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                    if(target.isSelected()){
+                        tag_data = (String[])target.getTag();
+                    }
+                }
+                Intent intent = new Intent(getActivity(), activity_sendmsg.class);
+                intent.putExtra("idx", 0);
+                intent.putExtra("data",tag_data);
+                intent.putExtra("grp_name", tag_data[1]);
+                startActivity(intent);
+
+            }
+        });
+        btn_grp_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        btn_grp_rm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_group);
+                String[] tag_data = new String[3];
+                for(int i=0; i<head_layout.getChildCount(); i++){
+                    RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                    if(target.isSelected()){
+                        tag_data = (String[])target.getTag();
+                        dbhelper = new DBHelper(getActivity(), "data", null, 1);
+                        dbhelper.rm_group(tag_data[0]);
+                    }
+                }
+                refresh();
+            }
+        });
+        btn_grp_unselect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_group);
+                for(int i=0; i<head_layout.getChildCount(); i++){
+                    RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                    if(target.isSelected()){
+                        target.setSelected(false);
+                        target.setBackground(getResources().getDrawable(R.drawable.border, null));
+                    }
+                }
+
+                Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+                LinearLayout hiddenPanel = (LinearLayout)getActivity().findViewById(R.id.hidden_panel_grp);
+                hiddenPanel.startAnimation(bottomDown);
+                hiddenPanel.setVisibility(View.GONE);
+
+                Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+                FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                btn_adduser.startAnimation(bottomUp);
+                btn_adduser.setVisibility(View.VISIBLE);
+                idx_select_grp = false;
+                idx_optionbar_grp = false;
+            }
+        });
+
+
+
+
         FloatingActionButton btn_adduser = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         btn_adduser.setSelected(true);
         btn_msg.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +181,7 @@ public class fragment_1 extends Fragment {
                     send_data.add(tempdata);
                 }
                 Intent intent = new Intent(getActivity(), activity_sendmsg.class);
+                intent.putExtra("idx", 1);
                 intent.putExtra("data",send_data);
                 startActivity(intent);
             }

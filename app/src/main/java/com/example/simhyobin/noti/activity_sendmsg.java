@@ -46,6 +46,7 @@ public class activity_sendmsg  extends AppCompatActivity{
         Intent intent = getIntent();
 
         ArrayList<String[]> data = (ArrayList<String[]>)intent.getSerializableExtra("data");
+        int idx = (int)intent.getSerializableExtra("idx");
         int user_cnt = data.size();
         int i=0;
         String[] list_name = new String[user_cnt];
@@ -68,11 +69,19 @@ public class activity_sendmsg  extends AppCompatActivity{
             app:subtitleTextColor="@color/title_secondary_text"
          */
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.test);
-        if(user_cnt == 1){
-            collapsingToolbarLayout.setTitle(String.valueOf(list_name[0]));
+
+        if(idx == 1){
+            if(user_cnt == 1){
+                collapsingToolbarLayout.setTitle(String.valueOf(list_name[0]));
+            }else{
+                collapsingToolbarLayout.setTitle(String.valueOf(list_name[0])+" 등 "+String.valueOf(user_cnt)+"명");
+            }
         }else{
-            collapsingToolbarLayout.setTitle(String.valueOf(list_name[0])+" 등 "+String.valueOf(user_cnt)+"명");
+            String grp_name = (String)intent.getSerializableExtra("grp_name");
+            collapsingToolbarLayout.setTitle(grp_name);
         }
+
+
 
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.title_primary_text, null));
 
