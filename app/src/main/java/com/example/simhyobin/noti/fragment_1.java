@@ -115,6 +115,27 @@ public class fragment_1 extends Fragment {
             @Override
             public void onClick(View view) {
 
+
+                LinearLayout head_layout = (LinearLayout)getActivity().findViewById(R.id.user_group);
+                String grp_num = new String();
+                dbhelper = new DBHelper(getActivity(), "data", null, 1);
+                String[] tag_data = new String[3];
+                for(int i=0; i<head_layout.getChildCount(); i++){
+                    RelativeLayout target = (RelativeLayout) head_layout.getChildAt(i);
+                    if(target.isSelected()){
+                        tag_data = (String[])target.getTag();
+                        grp_num = tag_data[0];
+                    }
+                }
+
+                ArrayList<String[]> send_data = dbhelper.getUserListfromGRPNUM(grp_num);
+                String grp_name = dbhelper.getGRPNAME(grp_num);
+                Intent intent = new Intent(getActivity(), activity_grp.class);
+                intent.putExtra("data",send_data);
+                intent.putExtra("idx", 1);
+                intent.putExtra("grp_name", grp_name);
+                intent.putExtra("grp_num", grp_num);
+                startActivity(intent);
             }
         });
         btn_grp_rm.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +264,7 @@ public class fragment_1 extends Fragment {
                 }
                 Intent intent = new Intent(getActivity(), activity_grp.class);
                 intent.putExtra("data",send_data);
+                intent.putExtra("idx", 0);
                 startActivity(intent);
             }
         });

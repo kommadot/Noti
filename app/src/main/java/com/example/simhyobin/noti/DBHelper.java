@@ -168,10 +168,9 @@ public class DBHelper extends SQLiteOpenHelper{
         }else{
             db.execSQL("UPDATE USER_FRIENDS SET USER_FAV=0 WHERE USER_ID=?",new String[]{user_id});
         }
+        db.close();
     }
     public void group_user(ArrayList<String[]> data, String grp_name){
-
-
 
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT GRP_NUM FROM USER_GROUPINFO ORDER BY GRP_NUM DESC", null);
@@ -184,12 +183,9 @@ public class DBHelper extends SQLiteOpenHelper{
             grp_num = 1;
         }
 
-
         int mem_cnt = data.size();
 
         db.execSQL("INSERT INTO USER_GROUPINFO VALUES(?,  ? , ?, 0);", new String[]{String.valueOf(grp_num), grp_name, String.valueOf(mem_cnt)});
-
-
 
         Iterator<String[]> iterator = data.iterator();
 
@@ -200,12 +196,65 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         db.close();
     }
+    public ArrayList<String[]> getUserListfromGRPNUM(String grp_num){
+        ArrayList<String[]> result = new ArrayList<String[]>();
+
+        String[] temp = new String[2];
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT UGM.USER_ID, UF.USER_NAME FROM USER_FRIENDS AS UF, USER_GROUPINFO AS UGI, USER_GROUPMEM AS UGM WHERE UGM.USER_ID = UF.USER_ID AND UGM.GRP_NUM = UGI.GRP_NUM AND UGM.GRP_NUM = ?", new String[]{grp_num});
+        cursor.moveToFirst();
+
+        while(!(cursor.isAfterLast())){
+            temp = new String[]{cursor.getString(0), cursor.getString(1)};
+            result.add(temp);
+            cursor.moveToNext();
+        }
+
+        return result;
+    }
+    public String getGRPNAME(String grp_num){
+        SQLiteDatabase db = getReadableDatabase();
+        String grp_name = new String();
+
+        Cursor cursor = db.rawQuery("SELECT GRP_NAME FROM USER_GROUPINFO WHERE GRP_NUM=?", new String[]{grp_num});
+        cursor.moveToFirst();
+        grp_name = cursor.getString(0);
+
+        return grp_name;
+    }
     public void rm_group(String grp_num){
         SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL("DELETE FROM USER_GROUPINFO WHERE GRP_NUM=?", new String[]{grp_num});
         db.execSQL("DELETE FROM USER_GROUPMEM WHERE GRP_NUM=?", new String[]{grp_num});
         db.close();
+
+    }
+    public void modify_group(ArrayList<String[]> data, String grp_num, String grp_name, int idx){
+        SQLiteDatabase db = getWritableDatabase();
+
+        if(idx == 1){
+         db.execSQL("UPDATE USER_GROUPINFO SET GRP_NAME=? WHERE GRP_NUM=?",new String[]{String.valueOf(grp_name), String.valueOf(grp_num)});
+        }
+
+        int mem_cnt = data.size();
+
+        db.execSQL("DELETE FROM USER_GROUPMEM WHERE GRP_NUM=?", new String[]{grp_num});
+
+        db.execSQL("UPDATE USER_GROUPINFO SET GRP_MEMCNT=? WHERE GRP_NUM=?;", new String[]{String.valueOf(mem_cnt), String.valueOf(grp_num)});
+
+        Iterator<String[]> iterator = data.iterator();
+
+        while(iterator.hasNext()){
+            String[] tempdata = iterator.next();
+            // 0 : name 1 : ID
+            db.execSQL("INSERT INTO USER_GROUPMEM VALUES(?, ?);", new String[]{tempdata[1], String.valueOf(grp_num)});
+        }
+        db.close();
+    }
+    public void modify_group(ArrayList<String[]> data, String grp_name, String grp_num){
 
     }
     public void test_user(){

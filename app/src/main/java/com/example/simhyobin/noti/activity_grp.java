@@ -23,6 +23,10 @@ import java.util.Iterator;
 
 public class activity_grp extends AppCompatActivity{
 
+    private String bf_grp_name;
+    private int idx;
+    private String bf_grp_num;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grp);
@@ -32,6 +36,26 @@ public class activity_grp extends AppCompatActivity{
         Intent intent = getIntent();
 
         ArrayList<String[]> data = (ArrayList<String[]>)intent.getSerializableExtra("data");
+
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsingtoolbar_grp);
+        android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton)findViewById(R.id.fab_grp);
+
+
+        idx = (int)intent.getSerializableExtra("idx");
+
+        if(idx == 0){
+            collapsingToolbarLayout.setTitle("새 그룹 만들기");
+            bf_grp_name = "";
+        }else{
+            collapsingToolbarLayout.setTitle("그룹 정보 수정");
+            floatingActionButton.setImageResource(R.drawable.baseline_edit_white_48);
+            String grp_name = (String)intent.getSerializableExtra("grp_name");
+            EditText editText_grpname = (EditText)findViewById(R.id.grp_name);
+            editText_grpname.setText(grp_name);
+            bf_grp_num = (String)intent.getSerializableExtra("grp_num");
+            bf_grp_name = grp_name;
+        }
+
         int user_cnt = data.size();
 
         final Iterator<String[]> iterator = data.iterator();
@@ -41,8 +65,8 @@ public class activity_grp extends AppCompatActivity{
             CreateUserList(tempdata[0], tempdata[1]);
         }
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsingtoolbar_grp);
-        collapsingToolbarLayout.setTitle("새 그룹 만들기");
+
+
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.title_primary_text, null));
 
 
@@ -61,26 +85,37 @@ public class activity_grp extends AppCompatActivity{
             }
         });
 
-        android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton)findViewById(R.id.fab_grp);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 LinearLayout head = (LinearLayout)findViewById(R.id.grp_userlist);
-
+                DBHelper dbHelper = new DBHelper(activity_grp.this, "data", null, 1);
                 ArrayList<String[]> data = new ArrayList<String[]>();
 
                 ArrayList<View> child_views = new ArrayList<>();
                 head.findViewsWithText(child_views, "selected", View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
 
-               for(int i=0; i<child_views.size(); i++){
-                   LinearLayout temp = (LinearLayout)child_views.get(i);
-                   data.add((String[])temp.getTag());
-               }
-                DBHelper dbHelper = new DBHelper(activity_grp.this, "data", null, 1);
+                for(int i=0; i<child_views.size(); i++){
+                    LinearLayout temp = (LinearLayout)child_views.get(i);
+                    data.add((String[])temp.getTag());
+                }
                 EditText editText = (EditText)findViewById(R.id.grp_name);
                 String grp_name = editText.getText().toString();
-                dbHelper.group_user(data, grp_name);
+
+                if(idx == 0){
+                    dbHelper.group_user(data, grp_name);
+                }else{
+                    if(grp_name.equals(bf_grp_name)){
+                        dbHelper.modify_group(data, bf_grp_num, grp_name, 0);
+                    }else{
+                        dbHelper.modify_group(data, bf_grp_num, grp_name, 1);
+                    }
+                }
+
+
+
 
             }
         });
