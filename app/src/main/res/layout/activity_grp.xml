@@ -61,7 +61,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/grp_name"
                             android:layout_width="match_parent"

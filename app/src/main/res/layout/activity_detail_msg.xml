@@ -37,7 +37,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/username"
                             android:focusable="false"
@@ -58,7 +58,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/title"
                             android:focusable="false"
@@ -79,7 +79,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/content"
                             android:layout_width="match_parent"
@@ -106,7 +106,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/notidate"
                             android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/recdate"
                             android:layout_width="match_parent"

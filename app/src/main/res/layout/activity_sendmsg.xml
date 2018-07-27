@@ -59,7 +59,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
@@ -79,7 +79,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/textbox_date"
                             android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:id="@+id/textbox_time"
                             android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                        >
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="200dp"
@@ -169,7 +169,7 @@
                             <android.support.design.widget.TextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                            >
                                 <EditText
                                     android:id="@+id/textbox_alarmcnt"
                                     android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                             <android.support.design.widget.TextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox.Dense">
+                                >
                                 <EditText
                                     android:id="@+id/textbox_alarmcycle"
                                     android:layout_width="match_parent"

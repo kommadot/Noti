@@ -423,7 +423,7 @@ public class fragment_1 extends Fragment {
     public void Listing_User(LinearLayout list_com, LinearLayout list_fav){
 
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
-        //dbhelper.test_user();
+        dbhelper.test_user();
         ArrayList<String[]> data = dbhelper.ReadFriendsData();
 
         Iterator iterator =  data.iterator();
