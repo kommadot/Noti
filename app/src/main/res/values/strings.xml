@@ -5,4 +5,5 @@
     <string name="secondpage">secondpage</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="kakao_app_key">c6ff1c06dce64a01b3523416e80ff9f5</string>
 </resources>

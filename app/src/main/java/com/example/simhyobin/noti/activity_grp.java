@@ -113,10 +113,8 @@ public class activity_grp extends AppCompatActivity{
                         dbHelper.modify_group(data, bf_grp_num, grp_name, 1);
                     }
                 }
-
-
-
-
+                onBackPressed();
+                finish();
             }
         });
     }

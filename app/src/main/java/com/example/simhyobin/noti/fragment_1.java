@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -135,7 +136,7 @@ public class fragment_1 extends Fragment {
                 intent.putExtra("idx", 1);
                 intent.putExtra("grp_name", grp_name);
                 intent.putExtra("grp_num", grp_num);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
         btn_grp_rm.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +266,7 @@ public class fragment_1 extends Fragment {
                 Intent intent = new Intent(getActivity(), activity_grp.class);
                 intent.putExtra("data",send_data);
                 intent.putExtra("idx", 0);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -423,14 +424,12 @@ public class fragment_1 extends Fragment {
     public void Listing_User(LinearLayout list_com, LinearLayout list_fav){
 
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
-        dbhelper.test_user();
+        //dbhelper.test_user();
         ArrayList<String[]> data = dbhelper.ReadFriendsData();
 
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
             String[] temp = (String[])iterator.next();
-            Log.d("name", temp[1]);
-            Log.d("fav", temp[2]+"test");
 
             if(temp[2].equals("0")){
                 Create_Usertap(list_com, temp[0], temp[1], temp[3]);
@@ -574,5 +573,18 @@ public class fragment_1 extends Fragment {
     public int getDP(int num){
         int dp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, num, getResources().getDisplayMetrics());
         return dp;
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode== 1){
+            Snackbar.make(getActivity().findViewById(R.id.content), "그룹 수정 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            refresh();
+        }
+        else if(requestCode== 2){
+            Snackbar.make(getActivity().findViewById(R.id.content), "그룹 생성 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            refresh();
+        }
     }
 }
