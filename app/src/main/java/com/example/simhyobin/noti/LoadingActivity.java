@@ -2,6 +2,7 @@ package com.example.simhyobin.noti;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 
 /**
  * Created by insec on 2018-07-09.
@@ -40,6 +38,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -48,6 +47,22 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                 startActivity(intent);
                 finish();
                 */
+                if(isLogin()){
+                    SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
+                    String user_name = pref.getString("name", "");
+                    if(user_name.equals("")){
+                        SharedPreferences login_pref = getSharedPreferences("pref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = login_pref.edit();
+                        editor.putString("isLogin", "False");
+                        editor.commit();
+                    }else{
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    }
+                }
+
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.layout_title);
                 int height = relativeLayout.getHeight();
 
@@ -69,24 +84,6 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         SignInButton signInButton = (SignInButton)findViewById(R.id.sign_in_google);
 
 
-        /*
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .build();
-
-
-        //로그인
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGoogleApiClient.connect();
-            }
-        });
-        */
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this ,  this )
@@ -102,6 +99,15 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         });
 
 
+    }
+    private boolean isLogin(){
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        String idx = pref.getString("isLogin", "");
+        if(idx.equals("True")){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -136,6 +142,13 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         Log.d("testlog", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+
+            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("isLogin", "True");
+            editor.commit();
+
+
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
             mGoogleApiClient.connect();
@@ -157,12 +170,17 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
          */
 
-            Log.d("Profile", String.valueOf(acct.getDisplayName()));
-            Log.d("Profile", String.valueOf(acct.getEmail()));
-            Log.d("Profile", String.valueOf(acct.getId()));
-            Log.d("Profile", String.valueOf(acct.getPhotoUrl()));
-        }
+            SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("name", acct.getDisplayName());
+            editor.putString("email", acct.getEmail());
+            //editor.putString("id", id);
+            //TODO : email을 통한 id 확인 -> 신규유저라면 발급 존재한다면 기존 값 전송받음 INPUT : e-mail(string) OUTPUT : id(string)
+            //email을 통한 id 확인 -> 신규유저라면 발급 존재한다면 기존 값 전송받음
+            editor.putString("photo", String.valueOf(acct.getPhotoUrl()));
+            editor.commit();
 
+        }
     }
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
