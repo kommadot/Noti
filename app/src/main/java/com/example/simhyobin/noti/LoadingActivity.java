@@ -162,7 +162,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
     private void handleSignInResult(GoogleSignInResult result){
-
+        Log.d("LoginTest", String.valueOf(result.getStatus()));
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
 
@@ -172,7 +172,18 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             String user_name = acct.getDisplayName();
             String user_email = acct.getEmail();
             String user_genID = acct.getId();
-            String user_profile = acct.getPhotoUrl().toString();
+            String user_profile;
+            if(acct.getPhotoUrl() == null){
+                user_profile = "default";
+            }else{
+                user_profile = acct.getPhotoUrl().toString();
+            }
+
+
+            Log.d("LoginTest", user_name);
+            Log.d("LoginTest", user_email);
+            Log.d("LoginTest", user_genID);
+            Log.d("LoginTest", user_profile);
 
 
             HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
@@ -186,6 +197,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             getID.enqueue(new Callback<GeneratorResource>() {
                 @Override
                 public void onResponse(Call<GeneratorResource> call, Response<GeneratorResource> response) {
+                    Log.d("NetworkTest", String.valueOf(response.body()));
                     GeneratorResource generatorResource = response.body();
                     String result = generatorResource.result;
                     if(result.equals("success")){
