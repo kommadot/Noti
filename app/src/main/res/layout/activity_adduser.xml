@@ -70,17 +70,17 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
         <FrameLayout
-            android:layout_width="102dp"
-            android:layout_height="56dp"
+            android:layout_width="86dp"
+            android:layout_height="48dp"
             android:layout_gravity="center">
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="친구 추가"
-                android:background="@color/primary"
                 android:textColor="@color/white"
-                style="@style/Widget.AppCompat.Button.Colored"
-                />
+                android:backgroundTint="@color/primary"
+                style="@style/Widget.AppCompat.Button.Colored"/>
+
         </FrameLayout>
 
     </LinearLayout>
