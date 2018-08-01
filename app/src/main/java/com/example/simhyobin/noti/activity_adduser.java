@@ -1,14 +1,18 @@
 package com.example.simhyobin.noti;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +36,21 @@ public class activity_adduser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adduser);
 
-        EditText search_user = (EditText)findViewById(R.id.edittext_searchuser);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.layout_title);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_white_24);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                finish();
+            }
+        });
+
+
+        final EditText search_user = (EditText)findViewById(R.id.edittext_searchuser);
         search_user.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -42,7 +60,7 @@ public class activity_adduser extends AppCompatActivity {
 
                         SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
                         String user_id = pref.getString("id", "");
-                        String friend_id = ((EditText)((EditText) findViewById(R.id.edittext_searchuser))).getText().toString();
+                        String friend_id = ((EditText)findViewById(R.id.edittext_searchuser)).getText().toString();
 
                         HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
 
@@ -61,11 +79,22 @@ public class activity_adduser extends AppCompatActivity {
                                     profile_friend.setVisibility(View.VISIBLE);
 
                                     ImageView profile_friend_photo = (ImageView)findViewById(R.id.profile_friend_photo);
+                                    TextView profile_friend_nickname = (TextView)findViewById(R.id.profile_friend_nickname);
                                     profile_friend_photo.setBackground(new ShapeDrawable(new OvalShape()));
                                     profile_friend_photo.setClipToOutline(true);
-                                    Log.d("addfriendtest", friendsResource.friend_id);
-                                    Log.d("addfriendtest", friendsResource.friend_nickname);
-                                    Log.d("addfriendtest", friendsResource.friend_img);
+
+                                    String friend_photo = friendsResource.friend_img;
+                                    String friend_nickname = friendsResource.friend_nickname;
+
+                                    try{
+
+                                        Bitmap img = new ProcessGetProfilePhoto(getApplicationContext(), profile_friend_photo).execute(friend_photo).get();
+                                        profile_friend_photo.setImageBitmap(img);
+                                        profile_friend_nickname.setText(friend_nickname);
+
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
                                 }else{
                                     Log.d("addfriendtest", "FUCKYOU");
 
@@ -86,6 +115,8 @@ public class activity_adduser extends AppCompatActivity {
                         return false;
                 }
 
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(search_user.getWindowToken(), 0);
                 return true;
             }
         });

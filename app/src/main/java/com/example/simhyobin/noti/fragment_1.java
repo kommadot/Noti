@@ -191,7 +191,6 @@ public class fragment_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), activity_adduser.class);
-                startActivity(intent);
                 startActivityForResult(intent, 3);
             }
         });

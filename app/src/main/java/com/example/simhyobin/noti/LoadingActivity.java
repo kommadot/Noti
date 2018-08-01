@@ -130,7 +130,6 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
     public void onConnected(Bundle bundle) {
         Log.d("testlog", "onConnected");
 
-
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
         finish();
@@ -175,9 +174,6 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             String user_genID = acct.getId();
             String user_profile = acct.getPhotoUrl().toString();
 
-            editor.putString("name", user_name);
-            editor.putString("email", user_email);
-
 
             HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
             Map<String, String> params3 = new HashMap<String, String>();
@@ -190,10 +186,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             getID.enqueue(new Callback<GeneratorResource>() {
                 @Override
                 public void onResponse(Call<GeneratorResource> call, Response<GeneratorResource> response) {
-                    Log.d("responsetest",String.valueOf(response.code()));
                     GeneratorResource generatorResource = response.body();
-                    Log.d("responsetest", generatorResource.user_id);
-                    Log.d("responsetest", generatorResource.result);
                     String result = generatorResource.result;
                     if(result.equals("success")){
                         editor.putString("id", generatorResource.user_id);
@@ -208,7 +201,8 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                     t.printStackTrace();
                 }
             });
-
+            editor.putString("name", user_name);
+            editor.putString("email", user_email);
             editor.putString("photo", user_profile);
             editor.commit();
         }
