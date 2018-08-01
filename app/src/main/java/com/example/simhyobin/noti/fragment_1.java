@@ -186,8 +186,16 @@ public class fragment_1 extends Fragment {
 
 
 
-        FloatingActionButton btn_adduser = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        btn_adduser.setSelected(true);
+        FloatingActionButton btn_adduser = (FloatingActionButton)view.findViewById(R.id.fab);
+        btn_adduser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), activity_adduser.class);
+                startActivity(intent);
+                startActivityForResult(intent, 3);
+            }
+        });
+
         btn_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -581,9 +589,11 @@ public class fragment_1 extends Fragment {
         if(requestCode== 1){
             Snackbar.make(getActivity().findViewById(R.id.content), "그룹 수정 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             refresh();
-        }
-        else if(requestCode== 2){
+        }else if(requestCode == 2){
             Snackbar.make(getActivity().findViewById(R.id.content), "그룹 생성 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            refresh();
+        }else if(requestCode == 3){
+            Snackbar.make(getActivity().findViewById(R.id.content), "친구 추가 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             refresh();
         }
     }

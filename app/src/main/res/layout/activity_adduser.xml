@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cast_expanded_controller_control_toolbar_min_height"
+        app:title="Noti 친구 추가"
+        android:background="@color/primary"
+        app:titleTextColor="@color/title_primary_text">
+
+
+    </android.support.v7.widget.Toolbar>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingLeft="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="친구 Noti ID"
+            android:gravity="bottom"/>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+            <EditText
+                android:id="@+id/edittext_searchuser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                style="@style/Base.V7.Widget.AppCompat.EditText"/>
+        </android.support.design.widget.TextInputLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>
