@@ -43,6 +43,23 @@
         </android.support.design.widget.TextInputLayout>
 
     </FrameLayout>
+    <LinearLayout
+        android:id="@+id/profile_friend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+            <ImageView
+                android:id="@+id/profile_friend_photo"
+                android:layout_width="102dp"
+                android:layout_height="102dp"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>
