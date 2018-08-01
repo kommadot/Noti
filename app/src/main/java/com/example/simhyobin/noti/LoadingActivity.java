@@ -162,13 +162,6 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
-        /*
-        acct.getDisplayName()
-        acct.getEmail()
-        acct.getId()
-        acct.getPhotoUrl()
-
-         */
 
             SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
@@ -179,7 +172,6 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             //email을 통한 id 확인 -> 신규유저라면 발급 존재한다면 기존 값 전송받음
             editor.putString("photo", String.valueOf(acct.getPhotoUrl()));
             editor.commit();
-
         }
     }
     @Override
