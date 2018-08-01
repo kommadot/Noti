@@ -56,14 +56,12 @@ public class fragment_3 extends Fragment {
         profile_photo.setBackground(new ShapeDrawable(new OvalShape()));
         profile_photo.setClipToOutline(true);
 
-
         SharedPreferences profile_pref = this.getActivity().getSharedPreferences("userprofile", Context.MODE_PRIVATE);
         String str_photo_url = profile_pref.getString("photo", "");
 
         if(str_photo_url.equals("default")){
             profile_photo.setImageResource(R.drawable.default_profilephoto);
         }else{
-
             try{
 
                 Bitmap img = new ProcessGetProfilePhoto(getActivity(), profile_photo).execute(str_photo_url).get();
@@ -73,7 +71,6 @@ public class fragment_3 extends Fragment {
                 e.printStackTrace();
             }
         }
-
 
         return view;
     }
