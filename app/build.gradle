@@ -11,14 +11,21 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
-    signingConfigs{
-        release{
-
+    signingConfigs {
+        release {
+            keyAlias 'myapp'
+            keyPassword 'gyqlsdlstjr12!@'
+            storeFile file('C:/Users/insec/myapp.jks')
+            storePassword 'gyqlsdlstjr12!@'
         }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }

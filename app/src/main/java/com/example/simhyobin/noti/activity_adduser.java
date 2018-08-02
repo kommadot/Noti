@@ -1,12 +1,14 @@
 package com.example.simhyobin.noti;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.vision.text.Line;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +35,10 @@ import retrofit2.Response;
 
 public class activity_adduser extends AppCompatActivity {
 
+    private String result_friend_photo;
+    private String result_friend_id;
+    private String result_friend_nickname;
+    private DBHelper dbhelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +52,25 @@ public class activity_adduser extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = getIntent().putExtra("idx", "N");
+                setResult(RESULT_OK, intent);
                 onBackPressed();
                 finish();
             }
         });
 
+        AppCompatButton appCompatButton = (AppCompatButton)findViewById(R.id.profile_friend_addbutton);
+        appCompatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbhelper = new DBHelper(getApplicationContext(), "data", null, 1);
+                dbhelper.add_friends(result_friend_id, result_friend_nickname, result_friend_photo);
+                Intent intent = getIntent().putExtra("idx", "Y");
+                setResult(RESULT_OK, intent);
+                onBackPressed();
+                finish();
+            }
+        });
 
         final EditText search_user = (EditText)findViewById(R.id.edittext_searchuser);
         search_user.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -72,10 +94,17 @@ public class activity_adduser extends AppCompatActivity {
                         add_Friend.enqueue(new Callback<FriendsResource>() {
                             @Override
                             public void onResponse(Call<FriendsResource> call, Response<FriendsResource> response) {
+
+                                LinearLayout profile_notfound = (LinearLayout)findViewById(R.id.layout_profile_notfound);
+                                LinearLayout profile_friend = (LinearLayout)findViewById(R.id.profile_friend);
+
+                                profile_notfound.setVisibility(View.GONE);
+                                profile_friend.setVisibility(View.GONE);
+
                                 FriendsResource friendsResource = response.body();
                                 String result = friendsResource.result;
                                 if(result.equals("success")){
-                                    LinearLayout profile_friend = (LinearLayout)findViewById(R.id.profile_friend);
+
                                     profile_friend.setVisibility(View.VISIBLE);
 
                                     ImageView profile_friend_photo = (ImageView)findViewById(R.id.profile_friend_photo);
@@ -83,20 +112,27 @@ public class activity_adduser extends AppCompatActivity {
                                     profile_friend_photo.setBackground(new ShapeDrawable(new OvalShape()));
                                     profile_friend_photo.setClipToOutline(true);
 
-                                    String friend_photo = friendsResource.friend_img;
-                                    String friend_nickname = friendsResource.friend_nickname;
+                                    result_friend_photo = friendsResource.friend_img;
+                                    result_friend_nickname = friendsResource.friend_nickname;
+                                    result_friend_id = friendsResource.friend_id;
 
-                                    try{
+                                    if(result_friend_photo.equals("default")){
+                                        profile_friend_photo.setImageResource(R.drawable.default_profilephoto);
+                                    }else{
+                                        try{
 
-                                        Bitmap img = new ProcessGetProfilePhoto(getApplicationContext(), profile_friend_photo).execute(friend_photo).get();
-                                        profile_friend_photo.setImageBitmap(img);
-                                        profile_friend_nickname.setText(friend_nickname);
+                                            Bitmap img = new ProcessGetProfilePhoto(getApplicationContext(), profile_friend_photo).execute(result_friend_photo).get();
+                                            profile_friend_photo.setImageBitmap(img);
+                                            profile_friend_nickname.setText(result_friend_nickname);
 
-                                    }catch(Exception e){
-                                        e.printStackTrace();
+                                        }catch(Exception e){
+                                            e.printStackTrace();
+                                        }
                                     }
+
                                 }else{
-                                    Log.d("addfriendtest", "FUCKYOU");
+
+                                    profile_notfound.setVisibility(View.VISIBLE);
 
                                 }
 

@@ -170,6 +170,11 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         db.close();
     }
+    public void add_friends(String user_id, String user_nickname, String user_photo){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("INSERT INTO USER_FRIENDS VALUES(?, ?, 0, 0);", new String[]{user_id, user_nickname});
+        db.close();
+    }
     public void group_user(ArrayList<String[]> data, String grp_name){
 
         SQLiteDatabase db = getWritableDatabase();

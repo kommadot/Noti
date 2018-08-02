@@ -456,7 +456,7 @@ public class fragment_1 extends Fragment {
         params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(60));
         head.setPadding(getDP(10),getDP(5), getDP(10), getDP(5));
 
-        head.setBackgroundColor(getResources().getColor(R.color.white, null));
+        head.setBackgroundColor(getResources().getColor(R.color.list_background, null));
         head.setLayoutParams(params1);
 
         parent.addView(head);
@@ -592,8 +592,10 @@ public class fragment_1 extends Fragment {
             Snackbar.make(getActivity().findViewById(R.id.content), "그룹 생성 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             refresh();
         }else if(requestCode == 3){
-            Snackbar.make(getActivity().findViewById(R.id.content), "친구 추가 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-            refresh();
+            if(data.getStringExtra("idx").equals("Y")){
+                Snackbar.make(getActivity().findViewById(R.id.content), "친구 추가 완료", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                refresh();
+            }
         }
     }
 }

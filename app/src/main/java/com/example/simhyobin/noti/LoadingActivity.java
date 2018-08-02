@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -180,18 +181,13 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             }
 
 
-            Log.d("LoginTest", user_name);
-            Log.d("LoginTest", user_email);
-            Log.d("LoginTest", user_genID);
-            Log.d("LoginTest", user_profile);
-
-
             HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
             Map<String, String> params3 = new HashMap<String, String>();
             params3.put("ungen_id", user_genID);
             params3.put("user_nickname", user_name);
             params3.put("user_email", user_email);
             params3.put("profile_url", user_profile);
+            params3.put("fcm_token", FirebaseInstanceId.getInstance().getToken());
 
             Call<GeneratorResource> getID = retrofitService.id_generate(params3);
             getID.enqueue(new Callback<GeneratorResource>() {
@@ -217,6 +213,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             editor.putString("email", user_email);
             editor.putString("photo", user_profile);
             editor.commit();
+
         }
     }
     @Override
