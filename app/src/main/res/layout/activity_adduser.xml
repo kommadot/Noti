@@ -43,6 +43,30 @@
         </android.support.design.widget.TextInputLayout>
 
     </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/baseline_error_black_48"
+                android:backgroundTint="@color/divider"/>
+            <TextView
+                android:id="@+id/profile_userID"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingLeft="5dp"
+                android:textSize="10dp"
+                android:gravity="center"
+                android:text="사용자 ID"/>
+        </LinearLayout>
+
+    </FrameLayout>
     <LinearLayout
         android:id="@+id/profile_friend"
         android:layout_width="match_parent"

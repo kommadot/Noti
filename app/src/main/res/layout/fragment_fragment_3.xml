@@ -14,18 +14,65 @@
             <LinearLayout
                 android:id="@+id/layout_profile"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="125dp"
                 android:orientation="vertical">
-                <FrameLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
-                    <ImageView
-                        android:id="@+id/profile_photo"
-                        android:layout_width="102dp"
-                        android:layout_height="102dp"
-                        android:layout_gravity="center" />
-                </FrameLayout>
+                    android:layout_height="125dp"
+                    android:paddingLeft="20dp"
+                    android:background="@drawable/border">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:orientation="horizontal">
+                        <RelativeLayout
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:layout_gravity="center_vertical">
+                            <ImageView
+                                android:id="@+id/profile_photo"
+                                android:layout_width="72dp"
+                                android:layout_height="72dp" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="20dp">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/layout_profile_userid"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="20dp"
+                                    android:text="Song Inseok"
+                                    android:textColor="@color/black"/>
+                                <TextView
+                                    android:text="+82 10-4622-6902"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp" />
+                            </LinearLayout>
 
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/baseline_navigate_next_black_48"
+                            android:backgroundTint="@color/divider"/>
+                    </RelativeLayout>
+                 
+                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
 

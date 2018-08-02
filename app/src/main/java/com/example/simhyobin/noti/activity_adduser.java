@@ -20,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.vision.text.Line;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +36,8 @@ public class activity_adduser extends AppCompatActivity {
     private String result_friend_photo;
     private String result_friend_id;
     private String result_friend_nickname;
+
+    private String user_id;
     private DBHelper dbhelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,13 @@ public class activity_adduser extends AppCompatActivity {
                 finish();
             }
         });
+
+        SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
+        user_id = pref.getString("id", "");
+
+        Log.d("userid", user_id);
+        TextView profile_userid = (TextView)findViewById(R.id.profile_userID);
+        profile_userid.setText("사용자 ID : "+user_id);
 
         AppCompatButton appCompatButton = (AppCompatButton)findViewById(R.id.profile_friend_addbutton);
         appCompatButton.setOnClickListener(new View.OnClickListener() {
@@ -80,8 +87,7 @@ public class activity_adduser extends AppCompatActivity {
                 switch (actionId){
                     case EditorInfo.IME_ACTION_SEARCH:
 
-                        SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
-                        String user_id = pref.getString("id", "");
+
                         String friend_id = ((EditText)findViewById(R.id.edittext_searchuser)).getText().toString();
 
                         HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
