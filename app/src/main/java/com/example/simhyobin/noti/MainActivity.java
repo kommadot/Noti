@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
-
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        FirebaseInstanceId.getInstance().getToken();
         Intent intent = getIntent();
 
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
