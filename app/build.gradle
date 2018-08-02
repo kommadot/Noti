@@ -15,16 +15,13 @@ android {
         release {
             keyAlias 'myapp'
             keyPassword 'gyqlsdlstjr12!@'
-            storeFile file('C:/Users/insec/myapp.jks')
+            storeFile file('/Users/simhyobin/keystore/myapp.jks.zip')
             storePassword 'gyqlsdlstjr12!@'
         }
     }
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.release
-        }
-        debug {
             signingConfig signingConfigs.release
         }
     }
