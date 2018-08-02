@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         FirebaseInstanceId.getInstance().getToken();
         Intent intent = getIntent();
-
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        FirebaseInstanceId.getInstance().getToken();
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
