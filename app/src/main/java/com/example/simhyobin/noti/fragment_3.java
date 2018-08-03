@@ -1,6 +1,7 @@
 package com.example.simhyobin.noti;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,16 +11,23 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import okhttp3.ResponseBody;
 
 
 public class fragment_3 extends Fragment {
@@ -58,6 +66,18 @@ public class fragment_3 extends Fragment {
 
         SharedPreferences profile_pref = this.getActivity().getSharedPreferences("userprofile", Context.MODE_PRIVATE);
         String str_photo_url = profile_pref.getString("photo", "");
+        String user_nickname = profile_pref.getString("name", "");
+        TextView nickname_textview = (TextView)view.findViewById(R.id.layout_profile_username);
+        nickname_textview.setText(user_nickname);
+        String myNumber = null;
+        TelephonyManager mgr = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        try{
+            myNumber = mgr.getLine1Number();
+            TextView phone_textview = (TextView)view.findViewById(R.id.layout_profile_phonenumber);
+            phone_textview.setText(myNumber);
+        }catch (Exception e){
+
+        }
 
         if(str_photo_url.equals("default")){
             profile_photo.setImageResource(R.drawable.default_profilephoto);
@@ -71,6 +91,34 @@ public class fragment_3 extends Fragment {
                 e.printStackTrace();
             }
         }
+
+
+        final RelativeLayout setting_profile = (RelativeLayout)view.findViewById(R.id.layout_setting_profile);
+        setting_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), setting_userprofile.class);
+                startActivity(intent);
+            }
+        });
+        final RelativeLayout setting_notice = (RelativeLayout)view.findViewById(R.id.layout_setting_notice);
+        setting_notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), setting_notice.class);
+                startActivity(intent);
+            }
+        });
+        final RelativeLayout setting_help = (RelativeLayout)view.findViewById(R.id.layout_setting_help);
+        setting_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), setting_help.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         return view;
     }

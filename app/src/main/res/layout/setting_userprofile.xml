@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/border2">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cast_expanded_controller_control_toolbar_min_height"
+        app:title="사용자 정보"
+        android:background="@color/primary"
+        app:titleTextColor="@color/title_primary_text">
+
+    </android.support.v7.widget.Toolbar>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_below="@+id/layout_title">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/border">
+                    <RelativeLayout
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_centerInParent="true">
+                        <ImageView
+                            android:src="@drawable/default_profilephoto"
+                            android:id="@+id/setting_profile"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp" />
+                    </RelativeLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/border"
+                    android:paddingLeft="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="프로필 사진 변경"
+                        android:textColor="@color/black"
+                        android:layout_alignParentLeft="true"/>
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/baseline_navigate_next_black_48"
+                        android:backgroundTint="@color/divider"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/border"
+                    android:paddingLeft="20dp">
+                    <TextView
+                        android:id="@+id/textview_ID_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="사용자 ID"
+                        android:textColor="@color/black"
+                        android:layout_alignParentLeft="true"/>
+                    <TextView
+                        android:layout_marginTop="0dp"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:text="NULL"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:background="@null"
+                        android:paddingLeft="10dp"
+                        android:layout_toRightOf="@+id/textview_ID_title"/>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/border"
+                    android:paddingLeft="20dp">
+                    <TextView
+                        android:id="@+id/textview_nickname_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="사용자 명"
+                        android:textColor="@color/black"
+                        android:layout_alignParentLeft="true"/>
+                    <EditText
+                        android:layout_marginTop="0dp"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:hint="NULL"
+                        android:textColor="@color/divider"
+                        android:background="@null"
+                        android:paddingLeft="10dp"
+                        android:layout_toRightOf="@+id/textview_nickname_title"/>
+
+                </RelativeLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="10dp"
+                        android:text="사용자의 ID 확인 및 프로필 사진과 사용자 명을 변경 할 수 있습니다."/>
+                </FrameLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/border"
+                    android:paddingLeft="20dp">
+                    <TextView
+                        android:id="@+id/userprofile_logout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="로그 아웃"
+                        android:textColor="@color/accent"
+                        android:layout_centerHorizontal="true"/>
+
+
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+</RelativeLayout>

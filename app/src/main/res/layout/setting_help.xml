@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cast_expanded_controller_control_toolbar_min_height"
+        app:title="도움말"
+        android:background="@color/primary"
+        app:titleTextColor="@color/title_primary_text">
+
+    </android.support.v7.widget.Toolbar>
+</android.support.constraint.ConstraintLayout>

@@ -15,7 +15,7 @@ android {
         release {
             keyAlias 'myapp'
             keyPassword 'gyqlsdlstjr12!@'
-            storeFile file('/Users/simhyobin/keystore/myapp.jks.zip')
+            storeFile file('C:/Users/insec/myapp.jks')
             storePassword 'gyqlsdlstjr12!@'
         }
     }
