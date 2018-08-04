@@ -3,6 +3,7 @@ package com.example.simhyobin.noti;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -213,6 +214,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             editor.putString("email", user_email);
             editor.putString("photo", user_profile);
             editor.commit();
+
         }
     }
     @Override

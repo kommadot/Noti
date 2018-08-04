@@ -27,7 +27,6 @@ public class ProcessGetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String ... params){
 
-
         try{
             URL url = new URL(params[0]);
             Bitmap img = BitmapFactory.decodeStream(url.openConnection().getInputStream());
