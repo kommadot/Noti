@@ -20,9 +20,8 @@ public class ProcessGetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
     private Context mContext;
     private View rootView;
 
-    public ProcessGetProfilePhoto(Context context, View rootView){
-        this.mContext = context;
-        this.rootView = rootView;
+    public ProcessGetProfilePhoto(){
+
     }
     @Override
     protected Bitmap doInBackground(String ... params){

@@ -65,8 +65,9 @@ public class fragment_3 extends Fragment {
         profile_photo.setClipToOutline(true);
 
         SharedPreferences profile_pref = this.getActivity().getSharedPreferences("userprofile", Context.MODE_PRIVATE);
-        String str_photo_url = profile_pref.getString("photo", "");
-        String user_nickname = profile_pref.getString("name", "");
+        final String user_nickname = profile_pref.getString("name", "");
+        final String user_id = profile_pref.getString("id", "");
+
         TextView nickname_textview = (TextView)view.findViewById(R.id.layout_profile_username);
         nickname_textview.setText(user_nickname);
         String myNumber = null;
@@ -76,21 +77,14 @@ public class fragment_3 extends Fragment {
             TextView phone_textview = (TextView)view.findViewById(R.id.layout_profile_phonenumber);
             phone_textview.setText(myNumber);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
-        if(str_photo_url.equals("default")){
-            profile_photo.setImageResource(R.drawable.default_profilephoto);
-        }else{
-            try{
+        UserDB userDB = new UserDB(getActivity(), "userdb", null, 1);
 
-                Bitmap img = new ProcessGetProfilePhoto(getActivity(), profile_photo).execute(str_photo_url).get();
-                profile_photo.setImageBitmap(img);
+        Bitmap img = userDB.getUserProfile(user_id);
+        profile_photo.setImageBitmap(img);
 
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
 
 
         final RelativeLayout setting_profile = (RelativeLayout)view.findViewById(R.id.layout_setting_profile);
@@ -98,6 +92,8 @@ public class fragment_3 extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), setting_userprofile.class);
+                intent.putExtra("userid", user_id);
+                intent.putExtra("nickname", user_nickname);
                 startActivity(intent);
             }
         });
@@ -122,4 +118,5 @@ public class fragment_3 extends Fragment {
 
         return view;
     }
+
 }

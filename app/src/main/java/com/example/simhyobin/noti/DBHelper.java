@@ -259,9 +259,7 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         db.close();
     }
-    public void modify_group(ArrayList<String[]> data, String grp_name, String grp_num){
 
-    }
     public void test_user(){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"AAAAAA\", \"송인석\", 0,  5);");

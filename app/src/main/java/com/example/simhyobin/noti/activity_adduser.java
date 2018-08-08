@@ -127,7 +127,7 @@ public class activity_adduser extends AppCompatActivity {
                                     }else{
                                         try{
 
-                                            Bitmap img = new ProcessGetProfilePhoto(getApplicationContext(), profile_friend_photo).execute(result_friend_photo).get();
+                                            Bitmap img = new ProcessGetProfilePhoto().execute(result_friend_photo).get();
                                             profile_friend_photo.setImageBitmap(img);
                                             profile_friend_nickname.setText(result_friend_nickname);
 

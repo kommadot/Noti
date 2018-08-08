@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +44,9 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
+    private UserDB userDB;
 
+    private String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -167,20 +172,22 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         Log.d("LoginTest", String.valueOf(result.getStatus()));
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
-
             SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
             final SharedPreferences.Editor editor = pref.edit();
 
-            String user_name = acct.getDisplayName();
-            String user_email = acct.getEmail();
-            String user_genID = acct.getId();
-            String user_profile;
+
+            final String user_name = acct.getDisplayName();
+            final String user_email = acct.getEmail();
+            final String user_genID = acct.getId();
+            final String user_profile;
+
             if(acct.getPhotoUrl() == null){
                 user_profile = "default";
             }else{
                 user_profile = acct.getPhotoUrl().toString();
             }
 
+            final String user_token = FirebaseInstanceId.getInstance().getToken();
 
             HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
             Map<String, String> params3 = new HashMap<String, String>();
@@ -188,7 +195,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             params3.put("user_nickname", user_name);
             params3.put("user_email", user_email);
             params3.put("profile_url", user_profile);
-            params3.put("fcm_token", FirebaseInstanceId.getInstance().getToken());
+            params3.put("fcm_token", user_token);
 
             Call<GeneratorResource> getID = retrofitService.id_generate(params3);
             getID.enqueue(new Callback<GeneratorResource>() {
@@ -198,7 +205,16 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                     GeneratorResource generatorResource = response.body();
                     String result = generatorResource.result;
                     if(result.equals("success")){
-                        editor.putString("id", generatorResource.user_id);
+                        user_id = generatorResource.user_id;
+                        userDB = new UserDB(getApplicationContext(), "userdb", null, 1);
+                        userDB.InsertUserData(user_id, user_name, user_email, user_token, getByteArrayFromPath(user_profile));
+
+                        editor.putString("name", user_name);
+                        editor.putString("id", user_id);
+                        editor.putString("email", user_email);
+                        editor.putString("token", user_token);
+                        editor.commit();
+
                     }else{
 
                     }
@@ -210,10 +226,8 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                     t.printStackTrace();
                 }
             });
-            editor.putString("name", user_name);
-            editor.putString("email", user_email);
-            editor.putString("photo", user_profile);
-            editor.commit();
+
+
 
         }
     }
@@ -230,5 +244,28 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         } else {
 
         }
+    }
+
+    public byte[] getByteArrayFromPath(String path){
+
+        Bitmap bitmap;
+        Log.d("test", path);
+        if(!(path.equals("default"))){
+            try {
+                bitmap = new ProcessGetProfilePhoto().execute(path).get();
+            }catch(Exception e){
+                bitmap = null;
+                e.printStackTrace();
+            }
+        }else{
+            bitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.default_profilephoto, null)).getBitmap();
+        }
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+        byte[] data = os.toByteArray();
+
+        return data;
+
     }
 }

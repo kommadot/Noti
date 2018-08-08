@@ -77,6 +77,7 @@
                         android:textColor="@color/black"
                         android:layout_alignParentLeft="true"/>
                     <TextView
+                        android:id="@+id/textview_ID_content"
                         android:layout_marginTop="0dp"
                         android:layout_width="200dp"
                         android:layout_height="match_parent"
@@ -102,6 +103,7 @@
                         android:textColor="@color/black"
                         android:layout_alignParentLeft="true"/>
                     <EditText
+                        android:id="@+id/edittext_nickname_content"
                         android:layout_marginTop="0dp"
                         android:layout_width="200dp"
                         android:layout_height="match_parent"

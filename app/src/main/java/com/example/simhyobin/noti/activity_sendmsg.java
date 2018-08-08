@@ -4,14 +4,17 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -25,8 +28,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by insec on 2018-07-15.
@@ -36,6 +46,12 @@ public class activity_sendmsg  extends AppCompatActivity{
 
     private int senddata_time;
     private int senddata_date;
+    private int idx;
+    private int user_cnt;
+    private String[] list_name;
+    private String[] list_id;
+    private int sel_year, sel_month, sel_day, sel_hour, sel_minute;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +62,11 @@ public class activity_sendmsg  extends AppCompatActivity{
         Intent intent = getIntent();
 
         ArrayList<String[]> data = (ArrayList<String[]>)intent.getSerializableExtra("data");
-        int idx = (int)intent.getSerializableExtra("idx");
-        int user_cnt = data.size();
+        idx = (int)intent.getSerializableExtra("idx");
+        user_cnt = data.size();
         int i=0;
-        String[] list_name = new String[user_cnt];
-        String[] list_id = new String[user_cnt];
+        list_name = new String[user_cnt];
+        list_id = new String[user_cnt];
 
         Iterator<String[]> iterator = data.iterator();
 
@@ -142,6 +158,9 @@ public class activity_sendmsg  extends AppCompatActivity{
                                 break;
                         }
 
+                        sel_year = selectedyear;
+                        sel_month = selectedmonth;
+                        sel_day = selectedday;
                         date_textInputLayout.setText(String.valueOf(selectedyear)+" / "+String.valueOf(selectedmonth+1) + " / " + String.valueOf(selectedday) + " ("+dayOfWeek+")");
 
                     }
@@ -163,6 +182,8 @@ public class activity_sendmsg  extends AppCompatActivity{
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         time_textInputLayout.setText(String.format("%02d", selectedHour)+" : "+ String.format("%02d", selectedMinute));
+                        sel_hour = selectedHour;
+                        sel_minute = selectedMinute;
                     }
                 }, hour, minute, true);
                 mTimePicker.setTitle("시간 설정");
@@ -314,6 +335,62 @@ public class activity_sendmsg  extends AppCompatActivity{
             }
         });
 
+
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab_sendmsg);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
+                String user_id = pref.getString("id", "");
+
+                EditText title = (EditText)findViewById(R.id.textbox_title);
+                EditText date = (EditText)findViewById(R.id.textbox_date);
+                EditText time = (EditText)findViewById(R.id.textbox_time);
+                EditText content = (EditText)findViewById(R.id.textbox_content);
+                EditText cycle = (EditText)findViewById(R.id.textbox_alarmcycle);
+                EditText count = (EditText)findViewById(R.id.textbox_alarmcnt);
+
+                long sendtime = System.currentTimeMillis()/1000L;
+                Date notitime = getDate(sel_year, sel_month, sel_day, sel_hour, sel_minute);
+
+                if(idx == 1){
+                    HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("content", content.getText().toString());
+                    params.put("date", String.valueOf(sendtime));
+                    params.put("title", title.getText().toString());
+                    params.put("noti_time", String.valueOf(notitime.getTime()/1000L));
+                    params.put("count", count.getText().toString());
+                    params.put("cycle", cycle.getText().toString());
+                    params.put("user_id", user_id);
+                    for(int i=0; i<user_cnt; i++){
+                        params.put("friend_id", list_id[i]);
+                        Call<MessageResponseResource> send_message = retrofitService.send_message(params);
+                        send_message.enqueue(new Callback<MessageResponseResource>() {
+                            @Override
+                            public void onResponse(Call<MessageResponseResource> call, Response<MessageResponseResource> response) {
+                                MessageResponseResource messageResponseResource = response.body();
+                                Log.d("message", messageResponseResource.result);
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageResponseResource> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }else{
+
+                }
+
+
+
+
+
+
+            }
+        });
+
     }
 
     private void setDividerColor(NumberPicker picker, int color){
@@ -354,5 +431,17 @@ public class activity_sendmsg  extends AppCompatActivity{
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+    }
+
+    public Date getDate(int year, int month, int day, int hour, int minute){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }

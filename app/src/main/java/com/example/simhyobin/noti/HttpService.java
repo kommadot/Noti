@@ -36,6 +36,10 @@ public interface HttpService {
     @FormUrlEncoded
     Call<FriendsResource> add_friend(@FieldMap Map<String, String> params);
 
+    @POST("/set_notification")
+    @FormUrlEncoded
+    Call<MessageResponseResource> send_message(@FieldMap Map<String, String> params);
+
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
