@@ -64,4 +64,12 @@ public class UserDB extends SQLiteOpenHelper {
         }
         return null;
     }
+
+    public void mod_usernickname(String nickname, String id){
+        SQLiteDatabase db = getWritableDatabase();
+
+        //update users set user_nickname="fuck" where user_id="b40f22"
+        db.execSQL("UPDATE USER_FRIENDS SET USER_NAME = ? WHERE USER_ID=?", new String[]{nickname, id});
+        db.close();
+    }
 }

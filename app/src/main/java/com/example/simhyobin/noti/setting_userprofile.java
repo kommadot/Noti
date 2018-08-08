@@ -1,6 +1,7 @@
 package com.example.simhyobin.noti;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -20,6 +21,7 @@ public class setting_userprofile extends AppCompatActivity {
 
     private String user_id;
     private String user_nickname;
+    private UserDB userDB;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +39,22 @@ public class setting_userprofile extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
-                finish();
+
+                EditText textbox_modnickname = (EditText)findViewById(R.id.edittext_nickname_content) ;
+
+                String mod_usernickname = textbox_modnickname.getText().toString();
+                if(mod_usernickname.equals(user_nickname)){
+                    onBackPressed();
+                    finish();
+                }else{
+                    SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("nickname", mod_usernickname);
+
+                    userDB = new UserDB(getApplicationContext(), "userdb", null, 1);
+                    userDB.mod_usernickname(mod_usernickname, user_id);
+
+                }
             }
         });
 
@@ -47,7 +63,7 @@ public class setting_userprofile extends AppCompatActivity {
         imageView_profile.setClipToOutline(true);
 
 
-        UserDB userDB = new UserDB(getApplicationContext(), "userdb", null, 1);
+        userDB = new UserDB(getApplicationContext(), "userdb", null, 1);
         Bitmap img = userDB.getUserProfile(user_id);
         imageView_profile.setImageBitmap(img);
 
