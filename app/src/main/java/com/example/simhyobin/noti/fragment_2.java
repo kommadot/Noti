@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,7 @@ public class fragment_2 extends Fragment {
     public MessageCardFragment adapter;
     private ArrayList<MessageItem> list = new ArrayList<>();
     DBHelper dbhelper;
+    private SwipeRefreshLayout refreshLayout = null;
     public static fragment_2 newInstance(int page, String title) {
         fragment_2 fragmentFirst = new fragment_2();
         Bundle args = new Bundle();
@@ -62,21 +64,29 @@ public class fragment_2 extends Fragment {
                              Bundle savedInstanceState){
 
         View view = inflater.inflate(R.layout.fragment_fragment_2, container, false);
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+
         Spinner sortSpinner = (Spinner)view.findViewById(R.id.sortSpinner);
         ArrayAdapter sortAdapter = ArrayAdapter.createFromResource(this.getActivity(),
                 R.array.sortArray, android.R.layout.simple_spinner_item);
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item
         );
+
         sortSpinner.setAdapter(sortAdapter);
-        //db
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
-        //dbhelper.insert();
-        //dbhelper.test_group();
-        //dbhelper.test_user();
         ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
         list = MessageItem.createContactsList(data);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         setList();
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                Log.d("onRefresh runinng","asdf");
+                refresh();
+                refreshLayout.setRefreshing(false);
+            }
+        });
         sortSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
@@ -97,6 +107,12 @@ public class fragment_2 extends Fragment {
         });
 
         return view;
+    }
+    public void refresh(){
+        ArrayList<String[]> data = dbhelper.ReadReceiveMessage();
+        list = MessageItem.createContactsList(data);
+        adapter.notifyDataSetChanged();
+        adapter.notifyItemRangeChanged(0,list.size());
     }
     public void sortBynoti(ArrayList<MessageItem> sortlist){
         Collections.sort(sortlist, new Comparator<MessageItem>(){
@@ -156,7 +172,6 @@ public class fragment_2 extends Fragment {
                 intent.putExtra("hash",list.get(position).getHash());
                 intent.putExtra("position",position);
                 startActivityForResult(intent,1);
-
             }
 
             @Override
