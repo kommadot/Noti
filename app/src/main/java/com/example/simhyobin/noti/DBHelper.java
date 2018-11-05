@@ -131,6 +131,21 @@ public class DBHelper extends SQLiteOpenHelper{
         cursor.close();
         return result;
     }
+    public void save_message(String hash_key,String title,String content,int date,int noti_time,String author_id,String author_nickname){
+        SQLiteDatabase db = getWritableDatabase();
+        Log.d("save_message DB ver",content);
+        db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES(?,?,?,?,?,?,?);",new String[]{author_id,author_nickname,content,title,String.valueOf(date),String.valueOf(noti_time),hash_key});
+        db.close();
+    }
+    /*db.execSQL("INSERT INTO USER_FRIENDS VALUES(?, ?, 0, 0);", new String[]{user_id, user_nickname});
+            sb2.append("USER_ID STRING NOT NULL,");
+        sb2.append("USER_NAME STRING NOT NULL,");
+        sb2.append("CONTENT STRING NOT NULL,");
+        sb2.append("TITLE STRING NOT NULL,");
+        sb2.append("RECEIVE_DATE int,");
+        sb2.append("NOTI_DATE int,");
+        sb2.append("UNIQUE_HASH STRING PRIMARY KEY);");
+        */
     public void rm_user(String user_id){
         SQLiteDatabase db = getWritableDatabase();
 
