@@ -5,19 +5,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#d6e6f5">
         <RelativeLayout
             android:id="@+id/layout_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_centerInParent="true"
-                android:textSize="50dp"
-                android:textColor="@color/primary"
-                android:text="Noti"/>
+                android:src="@drawable/noti"
+                />
+
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/layout_login"

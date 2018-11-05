@@ -38,11 +38,12 @@
                         <ImageView
                             android:src="@drawable/default_profilephoto"
                             android:id="@+id/setting_profile"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp" />
+                            android:layout_width="108dp"
+                            android:layout_height="108dp" />
                     </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout
+                    android:id="@+id/layout_selectProfile"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/border"

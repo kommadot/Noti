@@ -6,11 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -72,5 +74,23 @@ public class setting_userprofile extends AppCompatActivity {
 
         EditText edittext_usernickname = (EditText)findViewById(R.id.edittext_nickname_content);
         edittext_usernickname.setText(user_nickname);
+
+        RelativeLayout layout_selectprofile = (RelativeLayout)findViewById(R.id.layout_selectProfile);
+        layout_selectprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, 2000);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 2000){
+
+        }
     }
 }

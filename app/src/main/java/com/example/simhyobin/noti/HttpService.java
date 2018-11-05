@@ -22,7 +22,7 @@ import retrofit2.http.Query;
  */
 
 public interface HttpService {
-    public static final String API_URL = "http://komad.kr:30001";
+    public static final String API_URL = "http://komad.kr:31337";
 
 
     @POST("/message")

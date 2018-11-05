@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import com.google.android.gms.auth.api.Auth;
@@ -56,44 +57,54 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void run() {
 
-                if(isLogin()){
-                    SharedPreferences pref = getSharedPreferences("userprofile", MODE_PRIVATE);
-                    String user_name = pref.getString("name", "");
-                    if(user_name.equals("")){
-                        SharedPreferences login_pref = getSharedPreferences("pref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = login_pref.edit();
-                        editor.putString("isLogin", "False");
-                        editor.commit();
-                    }else{
+                if(isFirst()){
+                    //최초 작업 : 로그인
+                    RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.layout_title);
+                    int height = relativeLayout.getHeight();
+
+                    int title_height = height/3 * 2;
+                    int login_height = height/3 * 1;
+                    int target_title_height = height - title_height;
+
+                    ResizeAnimation resizeAnimation = new ResizeAnimation(relativeLayout, (int)target_title_height, (int)height);
+                    resizeAnimation.setDuration(500);
+                    relativeLayout.startAnimation(resizeAnimation);
+
+                    RelativeLayout relativeLayout_login = (RelativeLayout)findViewById(R.id.layout_login);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, login_height);
+                    relativeLayout_login.setLayoutParams(params);
+                    relativeLayout_login.setVisibility(View.VISIBLE);
+                }else{
+                    if(isLogin()){
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
-                        return;
+                    }else{
+                        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.layout_title);
+                        int height = relativeLayout.getHeight();
+
+                        int title_height = height/3 * 2;
+                        int login_height = height/3 * 1;
+                        int target_title_height = height - title_height;
+
+                        ResizeAnimation resizeAnimation = new ResizeAnimation(relativeLayout, (int)target_title_height, (int)height);
+                        resizeAnimation.setDuration(500);
+                        relativeLayout.startAnimation(resizeAnimation);
+
+                        RelativeLayout relativeLayout_login = (RelativeLayout)findViewById(R.id.layout_login);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, login_height);
+                        relativeLayout_login.setLayoutParams(params);
+                        relativeLayout_login.setVisibility(View.VISIBLE);
                     }
                 }
-
-                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.layout_title);
-                int height = relativeLayout.getHeight();
-
-                int title_height = height/3 * 2;
-                int login_height = height/3 * 1;
-                int target_title_height = height - title_height;
-
-                ResizeAnimation resizeAnimation = new ResizeAnimation(relativeLayout, (int)target_title_height, (int)height);
-                resizeAnimation.setDuration(500);
-                relativeLayout.startAnimation(resizeAnimation);
-
-                RelativeLayout relativeLayout_login = (RelativeLayout)findViewById(R.id.layout_login);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, login_height);
-                relativeLayout_login.setLayoutParams(params);
-                relativeLayout_login.setVisibility(View.VISIBLE);
             }
         }, 1500);
 
         SignInButton signInButton = (SignInButton)findViewById(R.id.sign_in_google);
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail().build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this ,  this )
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -109,10 +120,19 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
 
     }
+    private boolean isFirst(){
+        SharedPreferences pref = getSharedPreferences("isFirst", MODE_PRIVATE);
+        Boolean idx = pref.getBoolean("isFirst", false);
+        if(idx == true){
+            return true;
+        }else{
+            return false;
+        }
+    }
     private boolean isLogin(){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        String idx = pref.getString("isLogin", "");
-        if(idx.equals("True")){
+        SharedPreferences pref = getSharedPreferences("isLogin", MODE_PRIVATE);
+        Boolean idx = pref.getBoolean("isLogin", false);
+        if(idx == true){
             return true;
         }else{
             return false;
@@ -149,15 +169,17 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("testlog", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences pref = getSharedPreferences("isFirst", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("isLogin", "True");
+            editor.putBoolean("isFirst", false);
             editor.commit();
 
+            pref = getSharedPreferences("isLogin", MODE_PRIVATE);
+            editor = pref.edit();
+            editor.putBoolean("isLogin", true);
+            editor.commit();
 
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
@@ -222,7 +244,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
                 @Override
                 public void onFailure(Call<GeneratorResource> call, Throwable t) {
-                    Log.d("httptest", "error");
+                    Toast.makeText(getApplicationContext(), "Google 로그인에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
