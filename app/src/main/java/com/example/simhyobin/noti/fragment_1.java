@@ -2,7 +2,10 @@ package com.example.simhyobin.noti;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -432,17 +436,17 @@ public class fragment_1 extends Fragment {
 
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
         //dbhelper.test_user();
-        ArrayList<String[]> data = dbhelper.ReadFriendsData();
+        ArrayList<friendsData> data = dbhelper.ReadFriendsData();
 
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
-            String[] temp = (String[])iterator.next();
+            friendsData temp = (friendsData)iterator.next();
 
-            if(temp[2].equals("0")){
-                Create_Usertap(list_com, temp[0], temp[1], temp[3]);
-            }else if(temp[2].equals("1")){
+            if( String.valueOf(temp.getFav()).equals("0")){
+                Create_Usertap(list_com, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
+            }else if(String.valueOf(temp.getFav()).equals("1")){
                 //즐겨찾기 등록 친구
-                Create_Usertap(list_fav, temp[0], temp[1], temp[3]);
+                Create_Usertap(list_fav, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
             }else{
                 Log.d("test", "else");
             }
@@ -461,7 +465,7 @@ public class fragment_1 extends Fragment {
 
         parent.addView(head);
     }
-    public void Create_Usertap(LinearLayout parent, String user_id, String name, String cnt){
+    public void Create_Usertap(LinearLayout parent, String user_id, String name, String cnt, Bitmap profile){
 
         RelativeLayout head = new RelativeLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
@@ -475,9 +479,17 @@ public class fragment_1 extends Fragment {
         head.setBackground(getResources().getDrawable(R.drawable.border, null));
         head.setLayoutParams(params1);
 
+        params1 = new LinearLayout.LayoutParams(getDP(35), getDP(35));
+        ImageView profile_photo = new ImageView(getActivity());
+        profile_photo.setLayoutParams(params1);
+        profile_photo.setBackground(new ShapeDrawable(new OvalShape()));
+        profile_photo.setClipToOutline(true);
+        profile_photo.setImageBitmap(profile);
+
+
         params2 = new RelativeLayout.LayoutParams(getDP(150), ViewGroup.LayoutParams.MATCH_PARENT);
         params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        name_tap.setTextSize(getDP(10));
+        name_tap.setTextSize(getDP(8));
         name_tap.setGravity(Gravity.CENTER_VERTICAL);
         name_tap.setLayoutParams(params2);
         name_tap.setTextColor(Color.BLACK);
@@ -490,6 +502,7 @@ public class fragment_1 extends Fragment {
         cnt_tap.setLayoutParams(params2);
         cnt_tap.setText(cnt);
 
+        head.addView(profile_photo);
         head.addView(name_tap);
         head.addView(cnt_tap);
 
