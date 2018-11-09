@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
         mTab.getTabAt(1).setIcon(R.drawable.baseline_chat_black_48);
         mTab.getTabAt(2).setIcon(R.drawable.baseline_settings_black_48);
 
-
-
-
     }
 
 

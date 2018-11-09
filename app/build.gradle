@@ -15,7 +15,7 @@ android {
         release {
             keyAlias 'myapp'
             keyPassword 'gyqlsdlstjr12!@'
-            storeFile file('/Users/simhyobin/keystore/myapp.jks.zip')
+            storeFile file('C:/Users/insec/myapp.jks')
             storePassword 'gyqlsdlstjr12!@'
         }
     }
@@ -47,5 +47,6 @@ dependencies {
     implementation 'com.google.api-client:google-api-client-android:1.23.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.apis:google-api-services-calendar:v3-rev305-1.23.0'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
 }
 apply plugin: 'com.google.gms.google-services'

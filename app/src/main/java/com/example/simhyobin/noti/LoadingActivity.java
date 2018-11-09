@@ -1,5 +1,7 @@
 package com.example.simhyobin.noti;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -8,7 +10,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +31,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -52,6 +59,15 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleConfirmText("사용자의 전화번호 수집을 위해 접근 권한이 필요함.")
+                .setDeniedMessage("사용자의 전화번호 수집 권한 거부, [설정] > [권한] 에서 권한 허용 가능")
+                .setPermissions(Manifest.permission.READ_PHONE_STATE)
+                .check();
+
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -209,6 +225,24 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                 user_profile = acct.getPhotoUrl().toString();
             }
 
+            String myNumber = null;
+
+            TelephonyManager mgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+            try{
+                myNumber = mgr.getLine1Number();
+
+                if(myNumber == null){
+                    myNumber = "00000000000";
+                }
+            }catch (SecurityException e){
+                myNumber = "00000000000";
+                Toast.makeText(getApplicationContext(), "전화번호를 가져오는데 문제가 발생하였습니다.", Toast.LENGTH_SHORT);
+                e.printStackTrace();
+            }catch (Exception e){
+                myNumber = "00000000000";
+                Toast.makeText(getApplicationContext(), "전화번호를 가져오는데 문제가 발생하였습니다.", Toast.LENGTH_SHORT);
+                e.printStackTrace();
+            }
             final String user_token = FirebaseInstanceId.getInstance().getToken();
 
             HttpService retrofitService = HttpService.retrofit.create(HttpService.class);
@@ -218,12 +252,12 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
             params3.put("user_email", user_email);
             params3.put("profile_url", user_profile);
             params3.put("fcm_token", user_token);
+            params3.put("user_phone", myNumber);
 
             Call<GeneratorResource> getID = retrofitService.id_generate(params3);
             getID.enqueue(new Callback<GeneratorResource>() {
                 @Override
                 public void onResponse(Call<GeneratorResource> call, Response<GeneratorResource> response) {
-                    Log.d("NetworkTest", String.valueOf(response.body()));
                     GeneratorResource generatorResource = response.body();
                     String result = generatorResource.result;
                     if(result.equals("success")){
@@ -244,7 +278,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
 
                 @Override
                 public void onFailure(Call<GeneratorResource> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Google 로그인에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "서버로 데이터 전송에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
@@ -290,4 +324,15 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
         return data;
 
     }
+    PermissionListener permissionListener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            Toast.makeText(getApplicationContext(), "권한 허가", Toast.LENGTH_SHORT);
+        }
+
+        @Override
+        public void onPermissionDenied(List<String> deniedPermissions) {
+            Toast.makeText(getApplicationContext(), "권한 거부", Toast.LENGTH_SHORT);
+        }
+    };
 }

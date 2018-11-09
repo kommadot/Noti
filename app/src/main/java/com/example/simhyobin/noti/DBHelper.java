@@ -5,8 +5,13 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sb.append("CREATE TABLE USER_FRIENDS ( ");
         sb.append("USER_ID STRING PRIMARY KEY NOT NULL, ");
         sb.append("USER_NAME STRING NOT NULL, ");
+        sb.append("USER_PHOTO BLOB, ");
         sb.append("USER_FAV INT,");
         sb.append("MSG_CNT INT ); ");
 
@@ -85,23 +91,21 @@ public class DBHelper extends SQLiteOpenHelper{
 
         return result;
     }
-    public ArrayList<String[]> ReadFriendsData(){
+    public ArrayList<friendsData> ReadFriendsData(){
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM USER_FRIENDS", null);
 
-        ArrayList<String[]> result = new ArrayList<String[]>();
         int i = 0;
 
+        ArrayList<friendsData> result = new ArrayList<friendsData>();
         cursor.moveToFirst();
 
         while(!(cursor.isAfterLast())){
             String[] temp = new String[5];
-            temp[0] = cursor.getString(0);
-            temp[1] = cursor.getString(1);
-            temp[2] = String.valueOf(cursor.getInt(2));
-            temp[3] = String.valueOf(cursor.getInt(3));
-            result.add(temp);
+
+            friendsData tmp = new friendsData(cursor.getString(0), cursor.getString(1), getProfile(cursor.getBlob(2)), cursor.getInt(3), cursor.getInt(4) );
+            result.add(tmp);
 
             cursor.moveToNext();
         }
@@ -185,9 +189,13 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         db.close();
     }
-    public void add_friends(String user_id, String user_nickname, String user_photo){
+    public void add_friends(String user_id, String user_nickname, String user_photo, Bitmap user_photo_res){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(?, ?, 0, 0);", new String[]{user_id, user_nickname});
+        SQLiteStatement p = db.compileStatement("INSERT INTO USER_FRIENDS VALUES(?, ?, ?, 0, 0)");
+        p.bindString(1, user_id);
+        p.bindString(2,user_nickname);
+        p.bindBlob(3, getByteArrayFromBitmap(user_photo_res));
+        p.execute();
         db.close();
     }
     public void group_user(ArrayList<String[]> data, String grp_name){
@@ -285,7 +293,6 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"FFFFFF\", \"조우석\", 0,  8);");
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"111111\", \"홍길동\", 0,  8);");
         db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"222222\", \"아아아\", 0,  8);");
-        db.execSQL("INSERT INTO USER_FRIENDS VALUES(\"444444\", \"박세희\", 0,  13);");
         db.close();
     }
     public void test_group(){
@@ -302,5 +309,18 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','송인석','blahblahblahblahblahblahblahblahblahblahblahblahblah','똥쌀시간','1372339830','1372339120','hashm22an2');");
         db.execSQL("INSERT INTO RECEIVE_MESSAGE VALUES('a23bcdfdd','심효빈','blahblahblahblahblahblahblahblahblahblahblahblahblah','똥쌀시간','1372339850','1372339990','hashm22an22');");
         db.close();
+    }
+
+    public byte[] getByteArrayFromBitmap(Bitmap b){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] data = stream.toByteArray();
+        return data;
+    }
+
+    public Bitmap getProfile(byte[] b){
+        Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+        return bitmap;
     }
 }

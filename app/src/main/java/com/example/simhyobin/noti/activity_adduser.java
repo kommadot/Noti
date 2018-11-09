@@ -36,6 +36,7 @@ public class activity_adduser extends AppCompatActivity {
     private String result_friend_photo;
     private String result_friend_id;
     private String result_friend_nickname;
+    private Bitmap result_friend_photo_res;
 
     private String user_id;
     private DBHelper dbhelper;
@@ -71,7 +72,7 @@ public class activity_adduser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dbhelper = new DBHelper(getApplicationContext(), "data", null, 1);
-                dbhelper.add_friends(result_friend_id, result_friend_nickname, result_friend_photo);
+                dbhelper.add_friends(result_friend_id, result_friend_nickname, result_friend_photo, result_friend_photo_res);
                 Intent intent = getIntent().putExtra("idx", "Y");
                 setResult(RESULT_OK, intent);
                 onBackPressed();
@@ -94,7 +95,7 @@ public class activity_adduser extends AppCompatActivity {
 
                         Map<String, String> params = new HashMap<String, String>();
                         params.put("user_id", user_id);
-                        params.put("friend_id", friend_id);
+                        params.put("friend", friend_id);
 
                         Call<FriendsResource> add_Friend = retrofitService.add_friend(params);
                         add_Friend.enqueue(new Callback<FriendsResource>() {
@@ -129,6 +130,7 @@ public class activity_adduser extends AppCompatActivity {
 
                                             Bitmap img = new ProcessGetProfilePhoto().execute(result_friend_photo).get();
                                             profile_friend_photo.setImageBitmap(img);
+                                            result_friend_photo_res = img;
                                             profile_friend_nickname.setText(result_friend_nickname);
 
                                         }catch(Exception e){
