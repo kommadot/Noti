@@ -467,39 +467,40 @@ public class fragment_1 extends Fragment {
     }
     public void Create_Usertap(LinearLayout parent, String user_id, String name, String cnt, Bitmap profile){
 
-        RelativeLayout head = new RelativeLayout(getActivity());
+        LinearLayout head = new LinearLayout(getActivity());
         TextView name_tap = new TextView(getActivity());
         TextView cnt_tap = new TextView(getActivity());
+        ImageView profile_photo = new ImageView(getActivity());
 
-        LinearLayout.LayoutParams params1;
-        RelativeLayout.LayoutParams params2;
+        LinearLayout.LayoutParams params;
 
-        params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(50));
+
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDP(50));
         head.setPadding(getDP(10),getDP(5), getDP(10), getDP(5));
         head.setBackground(getResources().getDrawable(R.drawable.border, null));
-        head.setLayoutParams(params1);
+        head.setLayoutParams(params);
 
-        params1 = new LinearLayout.LayoutParams(getDP(35), getDP(35));
-        ImageView profile_photo = new ImageView(getActivity());
-        profile_photo.setLayoutParams(params1);
+        params = new LinearLayout.LayoutParams(getDP(35), getDP(35));
+
+        profile_photo.setLayoutParams(params);
         profile_photo.setBackground(new ShapeDrawable(new OvalShape()));
         profile_photo.setClipToOutline(true);
         profile_photo.setImageBitmap(profile);
 
 
-        params2 = new RelativeLayout.LayoutParams(getDP(150), ViewGroup.LayoutParams.MATCH_PARENT);
-        params2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        params = new LinearLayout.LayoutParams(getDP(0), ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        params.setMargins(getDP(10), 0, 0, 0);
         name_tap.setTextSize(getDP(8));
         name_tap.setGravity(Gravity.CENTER_VERTICAL);
-        name_tap.setLayoutParams(params2);
+        name_tap.setLayoutParams(params);
         name_tap.setTextColor(Color.BLACK);
         name_tap.setText(name);
 
 
-        params2 = new RelativeLayout.LayoutParams(getDP(40), ViewGroup.LayoutParams.MATCH_PARENT);
-        params2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params= new LinearLayout.LayoutParams(getDP(40), ViewGroup.LayoutParams.MATCH_PARENT);
+
         cnt_tap.setGravity(Gravity.CENTER);
-        cnt_tap.setLayoutParams(params2);
+        cnt_tap.setLayoutParams(params);
         cnt_tap.setText(cnt);
 
         head.addView(profile_photo);
