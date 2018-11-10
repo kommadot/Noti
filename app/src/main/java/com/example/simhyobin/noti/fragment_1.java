@@ -191,6 +191,7 @@ public class fragment_1 extends Fragment {
 
 
         FloatingActionButton btn_adduser = (FloatingActionButton)view.findViewById(R.id.fab);
+
         btn_adduser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -543,7 +544,7 @@ public class fragment_1 extends Fragment {
                     view.setBackgroundColor(getResources().getColor(R.color.primary_light, null));
                     list_selectedview.add(view);
                 }
-
+                Log.d("idx_select", String.valueOf(idx_select));
                 if(idx_select > 0){
 
                     if(idx_optionbar == true){
@@ -557,11 +558,15 @@ public class fragment_1 extends Fragment {
 
                     Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
                     FloatingActionButton btn_adduser = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                    /*
                     if(btn_adduser.isSelected()) {
                         btn_adduser.startAnimation(bottomDown);
                         btn_adduser.setVisibility(View.GONE);
                         btn_adduser.setSelected(false);
-                    }
+                    }*/
+                    btn_adduser.startAnimation(bottomDown);
+                    btn_adduser.setVisibility(View.GONE);
+
 
 
                     idx_optionbar = true;
@@ -574,12 +579,14 @@ public class fragment_1 extends Fragment {
 
                     Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
                     FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                    /*
                     if(!(btn_adduser.isSelected())){
                         btn_adduser.startAnimation(bottomUp);
                         btn_adduser.setVisibility(View.VISIBLE);
                         btn_adduser.setSelected(true);
-                    }
-
+                    }*/
+                    btn_adduser.startAnimation(bottomUp);
+                    btn_adduser.setVisibility(View.VISIBLE);
                     idx_optionbar = false;
                 }
             }

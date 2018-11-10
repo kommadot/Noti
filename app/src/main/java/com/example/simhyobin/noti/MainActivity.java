@@ -3,6 +3,8 @@ package com.example.simhyobin.noti;
 import android.content.Intent;
 
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -25,6 +27,17 @@ public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View view = getWindow().getDecorView();
+
+        if(Build.VERSION.SDK_INT >= 23){
+            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().setStatusBarColor(Color.parseColor("#f2f2f2"));
+        }else if(Build.VERSION.SDK_INT >= 21){
+            getWindow().setStatusBarColor(Color.WHITE);
+        }
+
+
         setContentView(R.layout.activity_main);
         ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
         //FirebaseMessaging.getInstance().subscribeToTopic("news");

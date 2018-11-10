@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_loading);
 
         TedPermission.with(this)
@@ -66,6 +68,7 @@ public class LoadingActivity extends AppCompatActivity implements GoogleApiClien
                 .setDeniedMessage("사용자의 전화번호 수집 권한 거부, [설정] > [권한] 에서 권한 허용 가능")
                 .setPermissions(Manifest.permission.READ_PHONE_STATE)
                 .check();
+
 
 
 
