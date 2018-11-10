@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gun0912.tedpermission.TedPermission;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -72,8 +74,14 @@ public class fragment_1 extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_1, container, false);
 
-        Listing_User((LinearLayout)view.findViewById(R.id.user_common), (LinearLayout)view.findViewById(R.id.user_favorite));
-        Listing_Group((LinearLayout)view.findViewById(R.id.user_group));
+        if(!Listing_User((LinearLayout)view.findViewById(R.id.user_common), (LinearLayout)view.findViewById(R.id.user_favorite))){
+            TextView title_fav = (TextView)view.findViewById(R.id.user_favorite_title);
+            title_fav.setVisibility(View.GONE);
+        }
+        if(!Listing_Group((LinearLayout)view.findViewById(R.id.user_group))){
+            TextView title_grp = (TextView)view.findViewById(R.id.user_group_title);
+            title_grp.setVisibility(View.GONE);
+        }
 
         LinearLayout btn_msg = (LinearLayout)view.findViewById(R.id.btn_sendmsg);
         LinearLayout btn_addfav = (LinearLayout)view.findViewById(R.id.btn_addfav);
@@ -306,16 +314,21 @@ public class fragment_1 extends Fragment {
         });
         return view;
     }
-    public void Listing_Group(LinearLayout list_group){
+    public boolean Listing_Group(LinearLayout list_group){
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
         //dbhelper.test_group();
+
+        boolean check = false;
         ArrayList<String[]> data = dbhelper.ReadGroupData();
 
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
+            check = true;
             String[] temp = (String[])iterator.next();
             Create_Grouptap(list_group, temp[0], temp[1], temp[2], temp[3]);
         }
+
+        return check;
     }
     public void Create_Grouptap(LinearLayout parent, String group_num, String group_name, String mem_cnt, String msg_cnt){
         final RelativeLayout head = new RelativeLayout(getActivity());
@@ -390,12 +403,14 @@ public class fragment_1 extends Fragment {
 
                     Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
                     FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+                    /*
                     if(!(btn_adduser.isSelected())){
                         btn_adduser.startAnimation(bottomUp);
                         btn_adduser.setVisibility(View.VISIBLE);
                         btn_adduser.setSelected(true);
-                    }
-
+                    }*/
+                    btn_adduser.startAnimation(bottomUp);
+                    btn_adduser.setVisibility(View.VISIBLE);
 
                     idx_optionbar_grp = false;
 
@@ -412,13 +427,14 @@ public class fragment_1 extends Fragment {
 
                     Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
                     FloatingActionButton btn_adduser = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-
+                    /*
                     if(btn_adduser.isSelected()) {
                         btn_adduser.startAnimation(bottomDown);
                         btn_adduser.setVisibility(View.GONE);
                         btn_adduser.setSelected(false);
-                    }
-
+                    }*/
+                    btn_adduser.startAnimation(bottomDown);
+                    btn_adduser.setVisibility(View.GONE);
                     idx_optionbar_grp = true;
                 }
 
@@ -433,12 +449,12 @@ public class fragment_1 extends Fragment {
 
         parent.addView(head);
     }
-    public void Listing_User(LinearLayout list_com, LinearLayout list_fav){
+    public boolean Listing_User(LinearLayout list_com, LinearLayout list_fav){
 
         dbhelper = new DBHelper(getActivity(), "data", null, 1);
         //dbhelper.test_user();
         ArrayList<friendsData> data = dbhelper.ReadFriendsData();
-
+        boolean check = false;
         Iterator iterator =  data.iterator();
         while(iterator.hasNext()){
             friendsData temp = (friendsData)iterator.next();
@@ -446,13 +462,17 @@ public class fragment_1 extends Fragment {
             if( String.valueOf(temp.getFav()).equals("0")){
                 Create_Usertap(list_com, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
             }else if(String.valueOf(temp.getFav()).equals("1")){
+                check = true;
                 //즐겨찾기 등록 친구
                 Create_Usertap(list_fav, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
             }else{
                 Log.d("test", "else");
             }
         }
+
         Create_Dumb(list_com);
+
+        return check;
     }
     public void Create_Dumb(LinearLayout parent){
         RelativeLayout head = new RelativeLayout(getActivity());
@@ -482,7 +502,7 @@ public class fragment_1 extends Fragment {
         head.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(getDP(35), getDP(35));
-
+        params.gravity = Gravity.CENTER;
         profile_photo.setLayoutParams(params);
         profile_photo.setBackground(new ShapeDrawable(new OvalShape()));
         profile_photo.setClipToOutline(true);
@@ -544,7 +564,7 @@ public class fragment_1 extends Fragment {
                     view.setBackgroundColor(getResources().getColor(R.color.primary_light, null));
                     list_selectedview.add(view);
                 }
-                Log.d("idx_select", String.valueOf(idx_select));
+
                 if(idx_select > 0){
 
                     if(idx_optionbar == true){
