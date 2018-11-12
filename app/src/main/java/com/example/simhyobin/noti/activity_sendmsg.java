@@ -79,7 +79,7 @@ public class activity_sendmsg  extends AppCompatActivity{
 
 
         /*
-                    app:title="Name 외 1명"
+            app:title="Name 외 1명"
             app:titleTextColor="@color/title_primary_text"
             app:subtitle="####년 ##월 ##일 ##시 ##분"
             app:subtitleTextColor="@color/title_secondary_text"

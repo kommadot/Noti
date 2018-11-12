@@ -218,7 +218,7 @@ public class fragment_1 extends Fragment {
                 Iterator iterator = list_selectedview.iterator();
                 while(iterator.hasNext()){
                     String[] tempdata = new String[2];
-                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    LinearLayout target = (LinearLayout)iterator.next();
                     tempdata = (String[])target.getTag();
                     send_data.add(tempdata);
                 }
@@ -235,7 +235,7 @@ public class fragment_1 extends Fragment {
                 dbhelper = new DBHelper(getActivity(), "data", null, 1);
                 Iterator iterator = list_selectedview.iterator();
                 while(iterator.hasNext()){
-                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    LinearLayout target = (LinearLayout)iterator.next();
                     String user_id = ((String[])target.getTag())[0];
                     dbhelper.fav_user(user_id);
                 }
@@ -255,7 +255,7 @@ public class fragment_1 extends Fragment {
                 dbhelper = new DBHelper(getActivity(), "data", null, 1);
                 Iterator iterator = list_selectedview.iterator();
                 while(iterator.hasNext()){
-                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    LinearLayout target = (LinearLayout)iterator.next();
                     String user_id = ((String[])target.getTag())[0];
                     dbhelper.rm_user(user_id);
                 }
@@ -279,7 +279,7 @@ public class fragment_1 extends Fragment {
                 Iterator iterator = list_selectedview.iterator();
                 while(iterator.hasNext()){
                     String[] tempdata = new String[2];
-                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    LinearLayout target = (LinearLayout)iterator.next();
                     tempdata = (String[])target.getTag();
                     send_data.add(tempdata);
                 }
@@ -295,7 +295,7 @@ public class fragment_1 extends Fragment {
             public void onClick(View view) {
                 Iterator iterator = list_selectedview.iterator();
                 while(iterator.hasNext()){
-                    RelativeLayout target = (RelativeLayout)iterator.next();
+                    LinearLayout target = (LinearLayout)iterator.next();
                     target.setSelected(false);
                     target.setBackground(getResources().getDrawable(R.drawable.border, null));
                 }
