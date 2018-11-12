@@ -12,7 +12,7 @@ import android.view.View;
 public class setting_help extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting_notice);
+        setContentView(R.layout.setting_help);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.layout_title);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_white_24);
