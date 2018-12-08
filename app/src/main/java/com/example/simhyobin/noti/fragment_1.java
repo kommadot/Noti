@@ -465,6 +465,7 @@ public class fragment_1 extends Fragment {
                 check = true;
                 //즐겨찾기 등록 친구
                 Create_Usertap(list_fav, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
+                Create_Usertap(list_com, temp.getID(), temp.getNickname(), String.valueOf(temp.getCnt()), temp.getProfile());
             }else{
                 Log.d("test", "else");
             }

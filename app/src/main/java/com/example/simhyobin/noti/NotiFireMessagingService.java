@@ -10,16 +10,39 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.format.DateFormat;
 import android.util.Log;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventReminder;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Locale;
+
+import static com.example.simhyobin.noti.MainActivity.mCredential;
 
 public class NotiFireMessagingService extends FirebaseMessagingService {
+    HttpTransport transport;
+    JsonFactory jsonFactory;
+    Calendar service;
+
+
 
     private static final String TAG = "NotiFirebaseMsgService";
     DBHelper dbhelper;
@@ -65,8 +88,58 @@ public class NotiFireMessagingService extends FirebaseMessagingService {
         JsonReader reader = new JsonReader(new StringReader(messageBody));
         reader.setLenient(true);
         MessageResource messageResource = gson.fromJson(reader, MessageResource.class);*/
-        dbhelper.save_message(remoteMessage.getData().get("hash_key"),remoteMessage.getData().get("title"),remoteMessage.getData().get("content"),Integer.parseInt(remoteMessage.getData().get("date")),Integer.parseInt(remoteMessage.getData().get("noti_time")),remoteMessage.getData().get("author_id"),remoteMessage.getData().get("author_nickname"));
 
+        String title = remoteMessage.getData().get("title");
+        String content = remoteMessage.getData().get("content");
+        String noti_time = remoteMessage.getData().get("noti_time");
+        String author_nickname = remoteMessage.getData().get("author_nickname");
+        dbhelper.save_message(remoteMessage.getData().get("hash_key"),title,content,Integer.parseInt(remoteMessage.getData().get("date")),Integer.parseInt(noti_time),remoteMessage.getData().get("author_id"),author_nickname);
+        // title, content, date, noti_time, author_nickname
+        GoogleAccountCredential cred = mCredential;
+
+
+        transport= AndroidHttp.newCompatibleTransport();
+        jsonFactory = JacksonFactory.getDefaultInstance();
+
+
+        try{
+            service = new com.google.api.services.calendar.Calendar.Builder(transport, jsonFactory, cred).setApplicationName("Noti").build();
+            Event event = new Event()
+                    .setSummary(title)
+                    .setLocation("Noti")
+                    .setDescription(content);
+
+            java.util.Calendar cal = java.util.Calendar.getInstance(Locale.KOREA);
+            cal.setTimeInMillis(Integer.parseInt(noti_time));
+            String date = DateFormat.format("yyyy-MM-DDThh:mm:ss", cal).toString();
+
+            DateTime startDateTime = new DateTime(date);
+            EventDateTime start = new EventDateTime()
+                    .setDateTime(startDateTime)
+                    .setTimeZone("Asia/Seoul");
+            event.setStart(start);
+
+            DateTime endDateTime = new DateTime(date);
+            EventDateTime end = new EventDateTime()
+                    .setDateTime(endDateTime)
+                    .setTimeZone("Asia/Seoul");
+            event.setEnd(end);
+
+
+            EventAttendee[] attendees = new EventAttendee[] {};
+            event.setAttendees(Arrays.asList(attendees));
+
+            EventReminder[] reminderOverrides = new EventReminder[] {};
+            Event.Reminders reminders = new Event.Reminders()
+                    .setUseDefault(false)
+                    .setOverrides(Arrays.asList(reminderOverrides));
+            event.setReminders(reminders);
+
+            String calendarId = "primary";
+            event = service.events().insert(calendarId, event).execute();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
     private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);

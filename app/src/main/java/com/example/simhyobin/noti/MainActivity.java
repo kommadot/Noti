@@ -1,8 +1,11 @@
 package com.example.simhyobin.noti;
 
+import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Intent;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,11 +20,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.CalendarScopes;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    public static GoogleAccountCredential mCredential;
+    Calendar service;
+
+
+
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR };
+    static final int REQUEST_ACCOUNT_PICKER = 2;
+    static final int REQUEST_AUTHORIZATION = 3;
+
+    insertCalendar insertcalender;
+
 
     private ViewPager mViewPager;
     FragmentPagerAdapter adapterViewPager;
@@ -41,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
         //FirebaseMessaging.getInstance().subscribeToTopic("news");
+
+        mCredential = GoogleAccountCredential.usingOAuth2(getApplicationContext(), Arrays.asList(SCOPES)).setBackOff(new ExponentialBackOff());
+        if (mCredential.getSelectedAccount() == null) {
+            Log.d("fail", "no Account");
+            startActivityForResult(mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+        }
+
+
+
         FirebaseInstanceId.getInstance().getToken();
         Intent intent = getIntent();
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
@@ -122,6 +154,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == REQUEST_ACCOUNT_PICKER){
+            if(resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null){
+                String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
+                if(accountName != null){
+                    mCredential.setSelectedAccountName(accountName);
+                }
+            }
+        }else if(requestCode == REQUEST_AUTHORIZATION){
+            startActivityForResult(mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+        }
+    }
 
 }
